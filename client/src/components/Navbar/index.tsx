@@ -28,7 +28,11 @@ import {
   CREATE_ORDER,
   LIST_SELL_ORDERS,
   USER_ASSETS,
+  USER_LOGIN_URL,
+  USER_SIGNUP_URL,
 } from "../../utils/NavUrls";
+import {useAppContext} from "../../provider/AppProvider";
+import {Link} from "react-router-dom";
 
 const Search = styled("div")(({theme}) => ({
   position: "relative",
@@ -89,15 +93,32 @@ const pages = [
         name: "Company Assets",
         url: COMPANY_ASSETS,
       },
+      {
+        name: "Market Assets",
+        url: GET_ASSETS_URL,
+      },
     ],
-    url: GET_ASSETS_URL,
   },
   {
     name: "Orders",
-    url: LIST_BUY_ORDERS,
+    listItems: [
+      {
+        name: "Create Order",
+        url: CREATE_ORDER,
+      },
+      {
+        name: "Market Buy Orders",
+        url: LIST_BUY_ORDERS,
+      },
+      {
+        name: "Market Buy Orders",
+        url: LIST_SELL_ORDERS,
+      },
+    ],
   },
 ];
 export default function PrimarySearchAppBar() {
+  const {jwt, account, currentBalance, disconnect} = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -145,26 +166,9 @@ export default function PrimarySearchAppBar() {
   };
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
+  // const renderMenu = (
+
+  // );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -324,7 +328,56 @@ export default function PrimarySearchAppBar() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
+      {jwt ? (
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        </Menu>
+      ) : (
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <Link to={`${USER_LOGIN_URL}`}>
+            <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
+          </Link>
+          <Link to={`${COMPANY_LOGIN_URL}`}>
+            <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
+          </Link>
+
+          <Link to={`${USER_SIGNUP_URL}`}>
+            <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
+          </Link>
+          <Link to={`${COMPANY_SIGNUP_URL}`}>
+            <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
+          </Link>
+        </Menu>
+      )}
     </Box>
   );
 }
