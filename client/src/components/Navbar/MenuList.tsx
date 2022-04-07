@@ -27,6 +27,8 @@ export default function CustomMenuList(props: any) {
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
           variant={"contained"}
+          sx={{margin: "0 10px"}}
+          color="secondary"
         >
           {props.page.name}
         </Button>
@@ -39,6 +41,8 @@ export default function CustomMenuList(props: any) {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
             variant={"contained"}
+            sx={{margin: "0 10px"}}
+            color="secondary"
           >
             {props.page.name}
           </Button>

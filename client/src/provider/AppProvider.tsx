@@ -22,6 +22,9 @@ interface IAppContext {
   getAccountBalance: (account: accountValue) => Promise<void>;
   setJWT: React.Dispatch<React.SetStateAction<string | null>>;
   notifications: any;
+  handleClose: any;
+  handleClick: any;
+  open: boolean;
 }
 
 export const AppContext = React.createContext<IAppContext>({
@@ -34,11 +37,36 @@ export const AppContext = React.createContext<IAppContext>({
   getAccountBalance: async () => {},
   setJWT: () => {},
   notifications: null,
+  handleClose: null,
+  handleClick: null,
+  open: false,
 });
 
 const AppProvider: React.FC = ({children}) => {
   const [notifications, setNotifications] = useState<any>([]);
   const listnerNotifications = useContractListner();
+
+  const [account, setAccount] = useState<accountValue>(null);
+  const [logout, setLogout] = useState<LogoutType>(null);
+  const [jwt, setJWT] = useState<string | null>(null);
+  const [currentBalance, setCurrentBalance] = useState<number>(0);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   useEffect(() => {
     notifications.map((notif: any) => {
       listnerNotifications.map((listnotif: any) => {
@@ -52,11 +80,6 @@ const AppProvider: React.FC = ({children}) => {
       });
     });
   }, [listnerNotifications, notifications]);
-
-  const [account, setAccount] = useState<accountValue>(null);
-  const [logout, setLogout] = useState<LogoutType>(null);
-  const [jwt, setJWT] = useState<string | null>(null);
-  const [currentBalance, setCurrentBalance] = useState<number>(0);
 
   const connectWallet = (): void => {
     connectWalletAccounts().then((acc) => {
@@ -114,6 +137,9 @@ const AppProvider: React.FC = ({children}) => {
     getAccountBalance,
     setJWT,
     notifications,
+    handleClose,
+    handleClick,
+    open,
   };
 
   return (

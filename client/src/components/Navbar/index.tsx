@@ -33,6 +33,7 @@ import {
 } from "../../utils/NavUrls";
 import {useAppContext} from "../../provider/AppProvider";
 import {Link} from "react-router-dom";
+import {accountAddressSlice} from "../../utils/helperFunctions";
 
 const Search = styled("div")(({theme}) => ({
   position: "relative",
@@ -344,8 +345,20 @@ export default function PrimarySearchAppBar() {
           open={isMenuOpen}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-          <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            Address : {accountAddressSlice(account)}
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            Balance : {currentBalance} LDT{" "}
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              disconnect();
+            }}
+          >
+            Disonnect Account
+          </MenuItem>
         </Menu>
       ) : (
         <Menu
