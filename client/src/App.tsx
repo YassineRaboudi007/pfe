@@ -29,6 +29,7 @@ import {
   CREATE_ORDER,
   LIST_SELL_ORDERS,
   LIST_BUY_ORDERS,
+  USER_ASSETS,
 } from "./utils/NavUrls";
 
 function App() {
@@ -43,14 +44,14 @@ function App() {
           <Route path={USER_LOGIN_URL} element={<UserLogIn />} />
           <Route path={COMPANY_SIGNUP_URL} element={<CompanySignUp />} />
           <Route path={COMPANY_LOGIN_URL} element={<CompanyLogIn />} />
-          <Route path={`${COMPANY_ASSETS}`} element={<CompanyAssets />} />
+          <Route path={COMPANY_ASSETS} element={<CompanyAssets />} />
           <Route path={`${GET_ASSETS_URL}/:name`} element={<AssetIndex />} />
           <Route path={GET_ASSETS_URL} element={<AssetIndex />} />
+          <Route path={USER_ASSETS} element={<AssetIndex />} />
           <Route path={ADD_ASSETS_URL} element={<CreateAsset />} />
           <Route path={CREATE_ORDER} element={<CreateBuyOrder />} />
           <Route path={LIST_SELL_ORDERS} element={<OrderList />} />
           <Route path={LIST_BUY_ORDERS} element={<OrderList />} />
-
           <Route path="*" element={<SwapContainer />} />
         </Routes>
       </Router>

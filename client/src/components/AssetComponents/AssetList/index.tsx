@@ -7,7 +7,7 @@ import {
   getAllAssets,
   getCompanyAssets,
 } from "../../../smart-contract/ContractFunctions/AssetContractFunctions";
-import {AssetContainer} from "./AssetContainer";
+import AssetContainer from "./AssetContainer";
 import {USER_ASSETS, GET_ASSETS_URL} from "../../../utils/NavUrls";
 import Loading from "../../Loading";
 

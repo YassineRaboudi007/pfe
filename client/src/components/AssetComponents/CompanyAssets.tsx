@@ -329,6 +329,7 @@ export default function EnhancedTable() {
                               (el: any) => el._id === row.company_id
                             )[0].symbol
                           }`}
+                          style={{textDecoration: "none", color: "inherit"}}
                         >
                           {
                             company.filter(

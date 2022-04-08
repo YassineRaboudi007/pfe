@@ -6,8 +6,6 @@ import Fade from "@mui/material/Fade";
 import {Link} from "react-router-dom";
 
 export default function CustomMenuList(props: any) {
-  console.log("porps ", props);
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,13 +25,16 @@ export default function CustomMenuList(props: any) {
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
           variant={"contained"}
-          sx={{margin: "0 10px"}}
           color="secondary"
+          sx={{minWidth: "150px", margin: " 10px"}}
         >
           {props.page.name}
         </Button>
       ) : (
-        <Link to={props.page.url}>
+        <Link
+          to={props.page.url}
+          style={{textDecoration: "none", color: "inherit"}}
+        >
           <Button
             id="fade-button"
             aria-controls={open ? "fade-menu" : undefined}
@@ -41,8 +42,8 @@ export default function CustomMenuList(props: any) {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
             variant={"contained"}
-            sx={{margin: "0 10px"}}
             color="secondary"
+            sx={{minWidth: "150px", margin: " 10px"}}
           >
             {props.page.name}
           </Button>
@@ -62,7 +63,14 @@ export default function CustomMenuList(props: any) {
         >
           {props.page.listItems.map((item: any, key: any) => (
             <div key={key}>
-              <Link to={item.url}>
+              <Link
+                to={item.url}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  minWidth: "100%",
+                }}
+              >
                 <MenuItem onClick={handleClose}>{item.name}</MenuItem>
               </Link>
             </div>
