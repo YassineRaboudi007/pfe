@@ -28,6 +28,7 @@ import {
   USER_ASSETS,
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
+  TRANSACTION,
 } from "../../utils/NavUrls";
 import {useAppContext} from "../../provider/AppProvider";
 import {Link} from "react-router-dom";
@@ -114,7 +115,6 @@ const pages = [
 ];
 export default function PrimarySearchAppBar() {
   const {jwt, account, currentBalance, disconnect} = useAppContext();
-  console.log("currentBalance", currentBalance);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -347,6 +347,12 @@ export default function PrimarySearchAppBar() {
           <MenuItem onClick={handleMenuClose}>
             Balance : {currentBalance} LDT{" "}
           </MenuItem>
+          <Link
+            to={TRANSACTION}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Transaction History</MenuItem>
+          </Link>
           <MenuItem
             onClick={() => {
               handleMenuClose();

@@ -14,7 +14,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export default function CustomizedSnackbars() {
   const {snackbar, changeSnackBar} = React.useContext(AppContext);
-  console.log("snackbar", snackbar);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,

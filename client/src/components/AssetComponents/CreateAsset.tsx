@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from "react";
+import {useState, useEffect} from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import {
@@ -9,17 +9,17 @@ import {
   Typography,
 } from "@mui/material";
 import useForm from "../../hooks/useForm";
-import {AppContext} from "../../provider/AppProvider";
+import {useAppContext} from "../../provider/AppProvider";
 import {getCompanyById} from "../../api/CompanyService";
 import {addAsset} from "../../smart-contract/ContractFunctions/AssetContractFunctions";
 import {getCompanyIdFromJWT} from "../../utils/decodeJWT";
 
 export default function SimplePaper() {
   const [company, setCompany] = useState<any>(null);
-  const {jwt} = useContext(AppContext);
+  const {jwt, changeSnackBar} = useAppContext();
   const [values, setValues] = useForm({
-    price: 0.5,
-    amount: 1,
+    price: null,
+    amount: null,
   });
   useEffect(() => {
     const compId = getCompanyIdFromJWT(jwt);
@@ -38,10 +38,13 @@ export default function SimplePaper() {
 
   const createEquity = async () => {
     if (!values.price || !values.amount) {
+      changeSnackBar(true, `Please Fill All Fields`, "warning");
       return;
     }
 
-    await addAsset({company: company._id, ...values});
+    (await addAsset({company: company._id, ...values}))
+      ? changeSnackBar(true, `Asset Created`, "success")
+      : changeSnackBar(true, `Error Occured`, "error");
   };
 
   // if (!jwt || (jwt && getRoleFromJWT(jwt) !== "company"))

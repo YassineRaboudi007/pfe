@@ -212,8 +212,6 @@ const EnhancedTableToolbar = (props: any) => {
 };
 
 export function OrderContainer(props: any) {
-  console.log(props);
-
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
   const [selected, setSelected] = React.useState<any>([]);

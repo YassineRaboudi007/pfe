@@ -28,3 +28,9 @@ export const buyContractAsset = async (
   const tx = await TransactionContract.buyAsset(buyParams);
   return await tx.wait();
 };
+
+export const getUserTransactions = async () => {
+  const TransactionContract = getTransactionContract();
+  const res = await TransactionContract.getUserTransactions();
+  return res;
+};

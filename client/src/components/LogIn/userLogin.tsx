@@ -60,7 +60,6 @@ export default function SignInSide() {
 
     if (!values.password || !values.email) {
       changeSnackBar(true, `Please Fill All Fields`, "warning");
-
       return;
     }
 

@@ -3,19 +3,19 @@ import AssetAbi from "./ContractABI/AssetContract.json";
 import TransactionAbi from "./ContractABI/TransactionContract.json";
 import OrderAbi from "./ContractABI/OrderContract.json";
 
-export const LDTokenAddress = "0x7264460596B68393c956872520a3175A2CB8C4FC";
+export const LDTokenAddress = "0x69d149FAE214EaB4186EfFa3FcF4d06C74B13A4c";
 export const LDTokenABI = LDTokenAbi.abi;
 
 export const AssetContractAddress =
-  "0x194eb04A61866f67189cCe01E27Dca06750087a1";
+  "0x74078Ef934950991b51d7440ca2F74Ed5898d389";
 export const AssetContractABI = AssetAbi.abi;
 
 export const TransactionContractAddress =
-  "0x8ec47A37e754493b194B96c67d0d619E4b8D40a5";
+  "0x310a45d5FbF31a1B6a00b7AB3E0bB98f1421f692";
 export const TransactionContractABI = TransactionAbi.abi;
 
 export const OrderContractAddress =
-  "0x3413a2369038A85dCEf19ed31d8927d488ddA4C5";
+  "0x4FFdA91e685EBe2c89F8DA6428DA6E626412ed0A";
 export const OrderContractABI = OrderAbi.abi;
 
 export const backendURl = "http://localhost:4000/";

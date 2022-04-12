@@ -17,7 +17,7 @@ import useForm from "../../hooks/useForm";
 import {addUser, getUser} from "../../api/UserService";
 
 import {useContext} from "react";
-import {AppContext} from "../../provider/AppProvider";
+import {AppContext, useAppContext} from "../../provider/AppProvider";
 import {COMPANY_SIGNUP_URL} from "../../utils/NavUrls";
 import {getCompany} from "../../api/CompanyService";
 import useCustomToast from "../../hooks/useCustomToast";
@@ -45,8 +45,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const {setJWT} = useContext(AppContext);
-  const {toast} = useCustomToast();
+  const {setJWT, changeSnackBar} = useAppContext();
   const [values, setValues] = useForm({
     name: "",
     password: "",
@@ -59,7 +58,7 @@ export default function SignInSide() {
   const LogIn = async (e: any) => {
     e.preventDefault();
     if (!values.name || !values.password) {
-      // toast(`Please Fill All Fields`, "warning");
+      changeSnackBar(true, `Please Fill All Fields`, "warning");
       return;
     }
 
@@ -68,7 +67,7 @@ export default function SignInSide() {
     });
 
     const res = await getCompany(values);
-    // if (res) toast("Logged In", "success");
+    if (res) changeSnackBar(true, `Logged In`, "success");
     setJWT(res.token);
   };
 

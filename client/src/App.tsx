@@ -30,8 +30,10 @@ import {
   LIST_SELL_ORDERS,
   LIST_BUY_ORDERS,
   USER_ASSETS,
+  TRANSACTION,
 } from "./utils/NavUrls";
 import CustomizedSnackbars from "./components/Snackbar";
+import Transaction from "./components/Transaction/index";
 
 function App() {
   return (
@@ -55,6 +57,7 @@ function App() {
           <Route path={CREATE_ORDER} element={<CreateBuyOrder />} />
           <Route path={LIST_SELL_ORDERS} element={<OrderList />} />
           <Route path={LIST_BUY_ORDERS} element={<OrderList />} />
+          <Route path={TRANSACTION} element={<Transaction />} />
           <Route path="*" element={<SwapContainer />} />
         </Routes>
       </Router>

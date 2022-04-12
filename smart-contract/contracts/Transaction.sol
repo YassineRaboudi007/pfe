@@ -13,9 +13,11 @@ contract TransactionContract {
     
     struct Transaction{
         uint asset_id;
+        string company_id;
         address userId;
         uint sellPrice;
-        uint timestamp;  
+        uint timestamp; 
+        bool isBuyer;
     }
 
     struct BuyParamsStruct{
@@ -35,14 +37,31 @@ contract TransactionContract {
             ldtContract.transferFrom(msg.sender,owner, _price);
             assetContract.changeAssetOwner(_buyParams[i].company_id, _buyParams[i].asset_id, msg.sender);
             assetContract.unlistAsset(_buyParams[i].company_id, _buyParams[i].asset_id);
-            Transaction memory tran = Transaction(
+            Transaction memory buyerTransaction = Transaction(
                 _buyParams[i].asset_id,
+                _buyParams[i].company_id,
                 msg.sender,
                 _price,
-                block.timestamp
+                block.timestamp,
+                true
             );
-            AssetTransactionHistory[_buyParams[i].asset_id].push(tran);
-            UserTransactionHistory[msg.sender].push(tran);
+
+            Transaction memory sellerTransaction = Transaction(
+                _buyParams[i].asset_id,
+                _buyParams[i].company_id,
+                msg.sender,
+                _price,
+                block.timestamp,
+                true
+            );
+
+            AssetTransactionHistory[_buyParams[i].asset_id].push(buyerTransaction);
+            UserTransactionHistory[msg.sender].push(buyerTransaction);
+            UserTransactionHistory[owner].push(sellerTransaction);
         }
+    }
+
+    function getUserTransactions() public view returns(Transaction[] memory){
+        return UserTransactionHistory[msg.sender];
     }
 }

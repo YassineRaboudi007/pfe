@@ -315,7 +315,7 @@ export default function EnhancedTable(props: any) {
     });
 
     if (currentBalance < totalPrice) {
-      console.log("money");
+      changeSnackBar(true, "Not Enough LDT Token", "error");
       return;
     }
 
@@ -323,6 +323,7 @@ export default function EnhancedTable(props: any) {
       props.toggleAction();
       updateAccountBalance();
       changeSnackBar(true, "Item Bough With Success", "success");
+      setSelected([]);
     }
   };
 
