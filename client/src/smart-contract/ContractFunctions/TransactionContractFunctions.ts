@@ -25,7 +25,6 @@ export const buyContractAsset = async (
     return false;
   }
 
-  // const tx = await TransactionContract.buyAsset(buyParams);
-  // return await tx.wait();
-  return true;
+  const tx = await TransactionContract.buyAsset(buyParams);
+  return await tx.wait();
 };

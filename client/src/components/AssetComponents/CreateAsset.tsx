@@ -10,23 +10,23 @@ import {
 } from "@mui/material";
 import useForm from "../../hooks/useForm";
 import {AppContext} from "../../provider/AppProvider";
-import {getAllCompanys} from "../../api/CompanyService";
-import {
-  addAsset,
-  getAllAssets,
-} from "../../smart-contract/ContractFunctions/AssetContractFunctions";
-import {getRoleFromJWT} from "../../utils/decodeJWT";
+import {getCompanyById} from "../../api/CompanyService";
+import {addAsset} from "../../smart-contract/ContractFunctions/AssetContractFunctions";
+import {getCompanyIdFromJWT} from "../../utils/decodeJWT";
 
 export default function SimplePaper() {
-  const [companys, setCompanys] = useState<any>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [company, setCompany] = useState<any>(null);
   const {jwt} = useContext(AppContext);
-
   const [values, setValues] = useForm({
-    company: "ok",
     price: 0.5,
     amount: 1,
   });
+  useEffect(() => {
+    const compId = getCompanyIdFromJWT(jwt);
+    getCompanyById(compId).then((res) => {
+      setCompany(res);
+    });
+  }, [jwt]);
 
   const onChange = (
     e:
@@ -34,26 +34,14 @@ export default function SimplePaper() {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     setValues(e);
-    console.log(values);
   };
 
-  useEffect(() => {
-    getAllCompanys().then((res) => {
-      setCompanys(res);
-      setIsLoading(false);
-    });
-  }, []);
-
   const createEquity = async () => {
-    console.log("values ,", values);
-
-    if (!values.company || !values.price || !values.amount) {
+    if (!values.price || !values.amount) {
       return;
     }
 
-    console.log("ok");
-
-    await addAsset(values);
+    await addAsset({company: company._id, ...values});
   };
 
   // if (!jwt || (jwt && getRoleFromJWT(jwt) !== "company"))
@@ -73,7 +61,9 @@ export default function SimplePaper() {
   //       </Box>
   //     </Box>
   //   );
-
+  if (!company) {
+    return <h1>"wait"</h1>;
+  }
   return (
     <Box
       sx={{
@@ -89,19 +79,17 @@ export default function SimplePaper() {
           <Typography variant="h4" align="center" sx={{margin: "50px"}}>
             Create Asset
           </Typography>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h6" sx={{m: 1}}>
             Company :
           </Typography>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Company</InputLabel>
             <OutlinedInput
-              id="outlined-adornment-amount"
-              label="Company"
-              onChange={setValues}
-              name="company"
+              label={company.symbol}
+              disabled
+              value={company.symbol}
             />
           </FormControl>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h6" sx={{m: 1}}>
             Amount :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -109,10 +97,11 @@ export default function SimplePaper() {
             <OutlinedInput
               id="outlined-adornment-amount"
               label="Amount"
+              name="amount"
               onChange={setValues}
             />
           </FormControl>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h6" sx={{m: 1}}>
             Price :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -120,6 +109,7 @@ export default function SimplePaper() {
             <OutlinedInput
               id="outlined-adornment-amount"
               label="Price"
+              name="price"
               onChange={setValues}
             />
           </FormControl>

@@ -5,5 +5,6 @@ export const getRoleFromJWT = (jwt) => {
 };
 
 export const getCompanyIdFromJWT = (jwt) => {
-  console.log(jwt);
+  if (jwt && jwt_decode(jwt).role === "company") return jwt_decode(jwt).id;
+  return false;
 };

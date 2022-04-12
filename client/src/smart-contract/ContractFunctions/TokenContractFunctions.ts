@@ -13,7 +13,9 @@ export const buyLDTTokens = async (amount: number) => {
     ethers.utils.parseUnits(amount.toString(), "ether"),
     {value: ethers.utils.parseUnits(amount.toString(), "ether")}
   );
-  await transactionHash.wait();
+
+  if (await transactionHash.wait()) return true;
+  return false;
 };
 
 export const sellLDTokens = async (amount: number) => {
@@ -21,5 +23,6 @@ export const sellLDTokens = async (amount: number) => {
   const transactionHash = await LDTokenContract.sellTokens(
     ethers.utils.parseUnits(amount.toString(), "ether")
   );
-  await transactionHash.wait();
+  if (await transactionHash.wait()) return true;
+  return false;
 };

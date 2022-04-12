@@ -74,30 +74,30 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{height: "100vh"}}>
+      <Grid container component="main" sx={{height: "93vh"}}>
         <CssBaseline />
         <Grid
           item
           xs={12}
-          sm={6}
-          md={6}
+          sm={12}
+          md={12}
           component={Paper}
           elevation={6}
           square
-          sx={{margin: "auto"}}
+          sx={{display: "flex", flexDirection: "column", alignItems: "center"}}
         >
-          <Box
+          <Paper
             sx={{
-              my: 8,
+              my: 20,
               mx: 4,
+              padding: "20px 30px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              width: "50%",
             }}
+            elevation={6}
           >
-            <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
-              <LockOutlinedIcon />
-            </Avatar>
             <Typography component="h1" variant="h5">
               Company Log In
             </Typography>
@@ -147,7 +147,7 @@ export default function SignInSide() {
               </Grid>
               <Copyright sx={{mt: 5}} />
             </Box>
-          </Box>
+          </Paper>
         </Grid>
       </Grid>
     </ThemeProvider>

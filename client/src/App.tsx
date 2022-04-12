@@ -31,6 +31,7 @@ import {
   LIST_BUY_ORDERS,
   USER_ASSETS,
 } from "./utils/NavUrls";
+import CustomizedSnackbars from "./components/Snackbar";
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
       {/* <ChakraProvider> */}
       <Router>
         <Navbar />
+        <CustomizedSnackbars />
+
         <Routes>
           <Route path={SWAP_TOKENS_URL} element={<SwapContainer />} />
           <Route path={USER_SIGNUP_URL} element={<UserSignUp />} />

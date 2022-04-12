@@ -25,10 +25,6 @@ export default function AssetIndex() {
       setAssets(await getBuyOrders());
       setBuy(false);
       setList(true);
-    } else if (pathname === LIST_SELL_ORDERS) {
-      setAssets(await getSellOrders());
-      setBuy(true);
-      setList(false);
     }
     setIsLoading(false);
   }, [pathname]);
@@ -36,10 +32,6 @@ export default function AssetIndex() {
   useEffect(() => {
     onLoad();
   }, [pathname, isAction, onLoad]);
-
-  // if (isLoading) {
-  //   return <p>wait</p>;
-  // }
 
   const sortData = (sortType: any) => {
     const mul = sortType === "asc" ? 1 : -1;

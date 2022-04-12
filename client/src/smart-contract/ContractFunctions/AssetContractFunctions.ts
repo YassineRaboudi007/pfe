@@ -13,6 +13,7 @@ export const addAsset = async (fields: IFields) => {
   if (fields.company === "") {
     return false;
   }
+  console.log("lol");
 
   const AssetContract = getAssetContract();
 

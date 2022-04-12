@@ -38,7 +38,7 @@ export default function AssetIndex() {
       const compSymbol = pathname.substring(pathname.lastIndexOf("/") + 1);
       setAssets(await getCompanyAssets(compSymbol));
       setBuy(false);
-      setList(true);
+      setList(false);
       setIsCompany(true);
     }
     setIsLoading(false);
@@ -47,10 +47,6 @@ export default function AssetIndex() {
   useEffect(() => {
     onLoad();
   }, [pathname, isAction, onLoad]);
-
-  // if (isLoading) {
-  //   return <p>wait</p>;
-  // }
 
   const sortData = (sortType: any) => {
     const mul = sortType === "asc" ? 1 : -1;
@@ -62,7 +58,6 @@ export default function AssetIndex() {
 
   const filterAssets = (searchTerm: any) => {
     if (!searchTerm) toggleAction();
-
     const filterdAssets: any = assets.filter((asset: any) =>
       asset.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     );

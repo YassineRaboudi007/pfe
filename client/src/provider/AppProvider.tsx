@@ -19,12 +19,18 @@ interface IAppContext {
   jwt: string | null;
   disconnect: () => void;
   connectWallet: () => void;
-  getAccountBalance: (account: accountValue) => Promise<void>;
+  updateAccountBalance: () => Promise<void>;
   setJWT: React.Dispatch<React.SetStateAction<string | null>>;
   notifications: any;
   handleClose: any;
   handleClick: any;
   open: boolean;
+  snackbar: any;
+  changeSnackBar: (
+    open: boolean,
+    message: string,
+    severity: "warning" | "success" | "info" | "error" | ""
+  ) => void;
 }
 
 export const AppContext = React.createContext<IAppContext>({
@@ -34,23 +40,46 @@ export const AppContext = React.createContext<IAppContext>({
   jwt: null,
   disconnect: () => {},
   connectWallet: () => {},
-  getAccountBalance: async () => {},
+  updateAccountBalance: async () => {},
   setJWT: () => {},
   notifications: null,
   handleClose: null,
   handleClick: null,
   open: false,
+  changeSnackBar: () => {},
+  snackbar: null,
 });
 
 const AppProvider: React.FC = ({children}) => {
   const [notifications, setNotifications] = useState<any>([]);
-  const listnerNotifications = useContractListner();
-
   const [account, setAccount] = useState<accountValue>(null);
   const [logout, setLogout] = useState<LogoutType>(null);
   const [jwt, setJWT] = useState<string | null>(null);
   const [currentBalance, setCurrentBalance] = useState<number>(0);
   const [open, setOpen] = React.useState(false);
+  const [snackbar, setSnackBar] = React.useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+
+  const listnerNotifications = useContractListner();
+
+  const changeSnackBar = (
+    open: boolean,
+    message: string,
+    severity: "warning" | "success" | "info" | "error" | ""
+  ) => {
+    if (open) {
+      setSnackBar({
+        open,
+        message,
+        severity,
+      });
+    } else {
+      setSnackBar({...snackbar, open: false});
+    }
+  };
 
   const handleClick = () => {
     setOpen(true);
@@ -94,7 +123,7 @@ const AppProvider: React.FC = ({children}) => {
     setLogout("LogedOut");
   };
 
-  const getAccountBalance = async (account: string | null) => {
+  const updateAccountBalance = async () => {
     const balanceInWei: number = await getContractAccountBalance(account);
     setCurrentBalance(formatEther(balanceInWei));
   };
@@ -106,7 +135,7 @@ const AppProvider: React.FC = ({children}) => {
         setAccount(res);
         setLogout("LogedIn");
         if (account) {
-          getAccountBalance(account);
+          updateAccountBalance();
         }
       } else {
         setLogout("LogedOut");
@@ -116,7 +145,7 @@ const AppProvider: React.FC = ({children}) => {
 
   const onLoad = useCallback(async () => {
     await setAccVal();
-    if (account) await getAccountBalance(account);
+    if (account) await updateAccountBalance();
   }, [setAccVal, account]);
 
   useEffect(() => {
@@ -134,12 +163,14 @@ const AppProvider: React.FC = ({children}) => {
     jwt,
     disconnect,
     connectWallet,
-    getAccountBalance,
+    updateAccountBalance,
     setJWT,
     notifications,
     handleClose,
     handleClick,
     open,
+    changeSnackBar,
+    snackbar,
   };
 
   return (

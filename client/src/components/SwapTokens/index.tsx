@@ -20,13 +20,14 @@ export default function SimplePaper() {
   const [amount, setAmount] = React.useState<number>(0.5);
   const [isBuying, setIsBuying] = React.useState<boolean>(true);
 
-  const {jwt, account, logout, getAccountBalance} =
+  const {jwt, account, logout, updateAccountBalance, changeSnackBar} =
     React.useContext(AppContext);
 
   const tokenStep: number = 0.01;
 
   const changedAmount = (e: any): void => {
-    setAmount(parseFloat(e));
+    console.log(e.target.value);
+    e.target.value ? setAmount(parseFloat(e.target.value)) : setAmount(0);
   };
 
   const switchPosition = () => {
@@ -34,8 +35,16 @@ export default function SimplePaper() {
   };
 
   const swaptTokens = async () => {
-    isBuying ? await buyLDTTokens(amount) : await sellLDTokens(amount);
-    console.log("account balance", await getAccountBalance(account));
+    if (isBuying) {
+      (await buyLDTTokens(amount))
+        ? changeSnackBar(true, "Bought Tokens", "success")
+        : changeSnackBar(true, "Error Occured", "error");
+    } else {
+      (await sellLDTokens(amount))
+        ? changeSnackBar(true, "Sold Tokens", "success")
+        : changeSnackBar(true, "Error Occured", "error");
+    }
+    updateAccountBalance();
   };
 
   return (

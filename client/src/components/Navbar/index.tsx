@@ -15,7 +15,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import {Button, MenuList} from "@mui/material";
 import CustomMenuList from "./MenuList";
 import {
   GET_ASSETS_URL,
@@ -26,7 +25,6 @@ import {
   COMPANY_LOGIN_URL,
   COMPANY_SIGNUP_URL,
   CREATE_ORDER,
-  LIST_SELL_ORDERS,
   USER_ASSETS,
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
@@ -111,15 +109,13 @@ const pages = [
         name: "Market Buy Orders",
         url: LIST_BUY_ORDERS,
       },
-      {
-        name: "Market Buy Orders",
-        url: LIST_SELL_ORDERS,
-      },
     ],
   },
 ];
 export default function PrimarySearchAppBar() {
   const {jwt, account, currentBalance, disconnect} = useAppContext();
+  console.log("currentBalance", currentBalance);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -376,17 +372,29 @@ export default function PrimarySearchAppBar() {
           open={isMenuOpen}
           onClose={handleMenuClose}
         >
-          <Link to={`${USER_LOGIN_URL}`}>
+          <Link
+            to={`${USER_LOGIN_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
             <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
           </Link>
-          <Link to={`${COMPANY_LOGIN_URL}`}>
+          <Link
+            to={`${COMPANY_LOGIN_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
             <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
           </Link>
 
-          <Link to={`${USER_SIGNUP_URL}`}>
+          <Link
+            to={`${USER_SIGNUP_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
             <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
           </Link>
-          <Link to={`${COMPANY_SIGNUP_URL}`}>
+          <Link
+            to={`${COMPANY_SIGNUP_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
             <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
           </Link>
         </Menu>

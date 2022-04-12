@@ -42,6 +42,7 @@ const theme = createTheme();
 
 export default function SignInSide() {
   const {setJWT, connectWallet} = React.useContext(AppContext);
+  const {snackbar, changeSnackBar} = React.useContext(AppContext);
 
   const [values, setValues] = useForm({
     password: "",
@@ -56,14 +57,16 @@ export default function SignInSide() {
 
   const Login = async (e: any) => {
     e.preventDefault();
+
     if (!values.password || !values.email) {
-      // toast(`Please Fill All Fields`, "warning");
+      changeSnackBar(true, `Please Fill All Fields`, "warning");
+
       return;
     }
 
     const res = await getUser(values);
 
-    // if (res) toast("Logged In", "success");
+    if (res) changeSnackBar(true, `Logged In`, "success");
 
     connectWallet();
 
@@ -72,37 +75,31 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{height: "100vh"}}>
+      <Grid container component="main" sx={{height: "93vh"}}>
         <CssBaseline />
+
         <Grid
           item
-          xs={false}
-          sm={4}
-          md={6}
-          sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
-          <Box
+          xs={12}
+          sm={12}
+          md={12}
+          component={Paper}
+          elevation={6}
+          square
+          sx={{display: "flex", flexDirection: "column", alignItems: "center"}}
+        >
+          <Paper
             sx={{
-              my: 8,
+              my: 20,
               mx: 4,
+              padding: "20px 30px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              width: "50%",
             }}
+            elevation={3}
           >
-            <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
-              <LockOutlinedIcon />
-            </Avatar>
             <Typography component="h1" variant="h5">
               User Log In
             </Typography>
@@ -152,7 +149,7 @@ export default function SignInSide() {
               </Grid>
               <Copyright sx={{mt: 5}} />
             </Box>
-          </Box>
+          </Paper>
         </Grid>
       </Grid>
     </ThemeProvider>

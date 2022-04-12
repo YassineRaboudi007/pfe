@@ -46,13 +46,10 @@ const addCompany = async (req, res) => {
 // @access  Public
 const loginCompany = async (req, res) => {
   const {name, password} = req.body;
-
+  console.log("name and pwd ", name, password);
   // Check for company mail
   const company = await Company.findOne({name});
   const companys = await Company.find();
-  console.log("companys ", companys);
-  console.log("name ", name);
-  console.log("company ", company);
 
   if (company && (await bcrypt.compare(password, company.password))) {
     res.json({
@@ -68,6 +65,11 @@ const getAllCompanys = async (req, res) => {
   res.json({companys});
 };
 
+const getCompanyById = async (req, res) => {
+  const company = await Company.findById(req.params.id);
+  res.json({company});
+};
+
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({id, role: "company"}, process.env.JWT_SECRET, {
@@ -79,4 +81,5 @@ module.exports = {
   addCompany,
   loginCompany,
   getAllCompanys,
+  getCompanyById,
 };

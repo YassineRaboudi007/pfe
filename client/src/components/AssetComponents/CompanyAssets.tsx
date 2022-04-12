@@ -324,7 +324,7 @@ export default function EnhancedTable() {
                     >
                       <TableCell>
                         <Link
-                          to={`/asset/${
+                          to={`/asset/market/${
                             company.filter(
                               (el: any) => el._id === row.company_id
                             )[0].symbol

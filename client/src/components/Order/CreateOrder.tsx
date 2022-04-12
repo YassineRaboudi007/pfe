@@ -5,7 +5,9 @@ import {
   Button,
   FormControl,
   InputLabel,
+  MenuItem,
   OutlinedInput,
+  Select,
   Typography,
 } from "@mui/material";
 import {AppContext} from "../../provider/AppProvider";
@@ -26,7 +28,7 @@ export default function SimplePaper() {
   const [isBuyOrder, setIsBuyOrder] = useState<boolean>(true);
   const [companys, setCompanys] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const {jwt, account, logout, getAccountBalance} = useContext(AppContext);
+  const {jwt, account, logout, updateAccountBalance} = useContext(AppContext);
   const {toast} = useCustomToast();
   const [values, setValues] = useForm({
     company: null,
@@ -34,15 +36,7 @@ export default function SimplePaper() {
     amount: 1,
   });
 
-  const switchPosition = () => {
-    setIsBuyOrder(!isBuyOrder);
-  };
-
-  const onChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const onChange = (e: any) => {
     setValues(e);
   };
 
@@ -54,6 +48,8 @@ export default function SimplePaper() {
   }, []);
 
   const placeOrder = () => {
+    console.log(values);
+
     if (!values.company || !values.price || !values.amount) {
       toast("Please Fill All Fields", "warning");
       return;
@@ -68,6 +64,10 @@ export default function SimplePaper() {
     createContractSellOrder(values);
   };
 
+  if (!companys) {
+    return <h1>wait</h1>;
+  }
+
   return (
     <Box
       sx={{
@@ -79,46 +79,27 @@ export default function SimplePaper() {
         elevation={3}
         sx={{width: "100%", marginTop: "10%", padding: "20px"}}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <Button
-            variant="contained"
-            endIcon={<ArrowForwardIosIcon />}
-            disabled={isBuyOrder ? true : false}
-            onClick={switchPosition}
-          >
-            Buy Order
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<ArrowBackIosNewIcon />}
-            onClick={switchPosition}
-            disabled={isBuyOrder ? false : true}
-          >
-            Sell Order
-          </Button>
-        </Box>
         <Box sx={{width: "90%", margin: "auto"}}>
           <Typography variant="h4" align="center" sx={{margin: "50px"}}>
-            {isBuyOrder ? "Max" : "Min"} Asset {isBuyOrder ? "Buy" : "Sell"}{" "}
-            Price (LDT)
+            Create Buy Order
           </Typography>
           <Typography variant="h5" sx={{m: 1}}>
             Company :
           </Typography>
           <FormControl fullWidth margin="normal">
             <InputLabel htmlFor="outlined-adornment-amount">Company</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-amount"
-              label="Company"
-              value="MST"
-            />
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              name="company"
+              value={companys[0]._id}
+              label="Age"
+              onChange={onChange}
+            >
+              {companys.map((comp: any) => (
+                <MenuItem value={comp._id}>{comp.symbol}</MenuItem>
+              ))}
+            </Select>
           </FormControl>
           <Typography variant="h5" sx={{m: 1}}>
             Amount :
@@ -129,10 +110,11 @@ export default function SimplePaper() {
               id="outlined-adornment-amount"
               label="Amount"
               value={amount}
+              onChange={onChange}
             />
           </FormControl>
           <Typography variant="h5" sx={{m: 1}}>
-            Price :
+            Max asset buy price :
           </Typography>
           <FormControl fullWidth margin="normal">
             <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
@@ -140,6 +122,7 @@ export default function SimplePaper() {
               id="outlined-adornment-amount"
               label="Price"
               value={amount}
+              onChange={onChange}
             />
           </FormControl>
           <Box

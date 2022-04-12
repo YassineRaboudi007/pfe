@@ -14,3 +14,10 @@ export const getAllCompanys = async () => {
   const res = await axios.get("http://localhost:4000/company/");
   return res.data.companys;
 };
+
+export const getCompanyById = async (id) => {
+  if (id) {
+    const res = await axios.post("http://localhost:4000/company/" + id);
+    return res.data.company;
+  }
+};

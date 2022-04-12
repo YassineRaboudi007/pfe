@@ -20,7 +20,7 @@ import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import {visuallyHidden} from "@mui/utils";
-import {Button, Container} from "@mui/material";
+import {Button, Container, InputAdornment, TextField} from "@mui/material";
 
 import {
   ADD_ASSETS_URL,
@@ -35,6 +35,8 @@ import {
   listContractAsset,
   unlistContractAsset,
 } from "../../../smart-contract/ContractFunctions/AssetContractFunctions";
+import SearchIcon from "@mui/icons-material/Search";
+
 // import AssetsEmpty from "../../AssetsEmpty";
 import useCustomToast from "../../../hooks/useCustomToast";
 import {useState} from "react";
@@ -221,13 +223,14 @@ const EnhancedTableToolbar = (props: any) => {
 };
 
 export default function EnhancedTable(props: any) {
+  const {currentBalance, updateAccountBalance, changeSnackBar} =
+    useAppContext();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
   const [selected, setSelected] = React.useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const {currentBalance, jwt} = useAppContext();
 
   const [companyInfo, setCompanyInfo] = React.useState<any>([]);
 
@@ -318,6 +321,8 @@ export default function EnhancedTable(props: any) {
 
     if (await buyContractAsset(buyParams, currentBalance)) {
       props.toggleAction();
+      updateAccountBalance();
+      changeSnackBar(true, "Item Bough With Success", "success");
     }
   };
 
@@ -326,6 +331,20 @@ export default function EnhancedTable(props: any) {
   return (
     <Container maxWidth="lg">
       <Box sx={{width: "100%", marginTop: "20px"}}>
+        <TextField
+          id="outlined-basic"
+          label="Search By Name"
+          variant="filled"
+          sx={{width: "100%", margin: "20px 0"}}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          onChange={(e) => props.filterAssets(e.target.value)}
+        />
         <Paper sx={{width: "100%", mb: 2}}>
           <EnhancedTableToolbar
             numSelected={selected.length}
