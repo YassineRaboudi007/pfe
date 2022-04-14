@@ -29,6 +29,8 @@ export const formatAsset = (assets: any, companys: any) => {
 };
 
 export const formatOrder = (orders: any, companys: any) => {
+  console.log(orders);
+
   const res = orders.map((order: any) => {
     const companySymbol = companys.filter(
       (el: any) => el._id === order.company_id
@@ -44,6 +46,7 @@ export const formatOrder = (orders: any, companys: any) => {
       quantity: parseInt(order.quantity, 16),
       company_id: order.company_id,
       created_at: new Date(order.timestamp * 1000).toLocaleString(),
+      isActive: order.isActive,
     };
   });
   return res;

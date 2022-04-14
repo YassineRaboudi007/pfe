@@ -41,7 +41,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import useCustomToast from "../../../hooks/useCustomToast";
 import {useState} from "react";
 import {getRoleFromJWT} from "../../../utils/decodeJWT";
-import {cancelBuyOrder} from "../../../smart-contract/ContractFunctions/OrderContractFunctions";
+import {
+  activateBuyOrder,
+  cancelBuyOrder,
+} from "../../../smart-contract/ContractFunctions/OrderContractFunctions";
 
 interface Data {
   calories: number;
@@ -270,6 +273,12 @@ export function OrderContainer(props: any) {
 
   const cancelOrder = async (id: any) => {
     await cancelBuyOrder(id);
+    props.toggleAction();
+  };
+
+  const activateOrder = async (id: any) => {
+    await activateBuyOrder(id);
+    props.toggleAction();
   };
 
   return (
@@ -330,12 +339,21 @@ export function OrderContainer(props: any) {
                       <TableCell>{item.created_at}</TableCell>
                       {props.cancel && (
                         <TableCell>
-                          <Button
-                            variant="outlined"
-                            onClick={() => cancelOrder(parseInt(item.id))}
-                          >
-                            Cancel Order
-                          </Button>
+                          {item.isActive ? (
+                            <Button
+                              variant="outlined"
+                              onClick={() => cancelOrder(parseInt(item.id))}
+                            >
+                              Cancel Order
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              onClick={() => activateOrder(parseInt(item.id))}
+                            >
+                              Activate Order
+                            </Button>
+                          )}
                         </TableCell>
                       )}
                     </TableRow>

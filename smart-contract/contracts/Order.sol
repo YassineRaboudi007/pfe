@@ -251,6 +251,17 @@ contract OrderContract {
                 thisOrder = BuyOrders[i];
             }
         }
+        thisOrder.isActive = false;
+    }
+
+    function activateBuyOrder(uint _id) public {
+        Order storage thisOrder = BuyOrders[0];
+        for (uint i=0;i<buyId;i++){
+            if (BuyOrders[i].id == _id){
+                thisOrder = BuyOrders[i];
+            }
+        }
         thisOrder.isActive = true;
+        thisOrder.timestamp = block.timestamp;
     }
 }

@@ -83,3 +83,9 @@ export const cancelBuyOrder = async (id: any) => {
   const tx = await OrderContract.cancelBuyOrder(id);
   return await tx.wait();
 };
+
+export const activateBuyOrder = async (id: any) => {
+  const OrderContract = getOrderContract();
+  const tx = await OrderContract.activateBuyOrder(id);
+  return await tx.wait();
+};
