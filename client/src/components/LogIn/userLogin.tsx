@@ -42,17 +42,15 @@ const theme = createTheme();
 
 export default function SignInSide() {
   const {setJWT, connectWallet} = React.useContext(AppContext);
-  const {snackbar, changeSnackBar} = React.useContext(AppContext);
+  const {changeSnackBar} = React.useContext(AppContext);
 
   const [values, setValues] = useForm({
     password: "",
     email: "",
   });
 
-  // const {toast} = useCustomToast();
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues(e);
-    console.log(values);
   };
 
   const Login = async (e: any) => {
@@ -66,9 +64,7 @@ export default function SignInSide() {
     const res = await getUser(values);
 
     if (res) changeSnackBar(true, `Logged In`, "success");
-
     connectWallet();
-
     setJWT(res.token);
   };
 
@@ -76,7 +72,6 @@ export default function SignInSide() {
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{height: "93vh"}}>
         <CssBaseline />
-
         <Grid
           item
           xs={12}

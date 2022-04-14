@@ -3,17 +3,18 @@ import {useLocation} from "react-router-dom";
 
 import {
   getBuyOrders,
+  getMarketBuyOrders,
   getSellOrders,
+  getUserBuyOrders,
 } from "../../../smart-contract/ContractFunctions/OrderContractFunctions";
 import {OrderContainer} from "./OrderContainer";
-import {LIST_BUY_ORDERS, LIST_SELL_ORDERS} from "../../../utils/NavUrls";
+import {MARKET_ORDERS, USER_ORDERS} from "../../../utils/NavUrls";
 
 export default function AssetIndex() {
   const {pathname} = useLocation();
   const [assets, setAssets] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [buy, setBuy] = useState<boolean>(true);
-  const [list, setList] = useState<boolean>(false);
+  const [cancel, setCancel] = useState<boolean>(false);
   const [isAction, setIsAction] = useState<boolean>(false);
 
   const toggleAction = () => {
@@ -21,10 +22,12 @@ export default function AssetIndex() {
   };
 
   const onLoad = useCallback(async () => {
-    if (pathname === LIST_BUY_ORDERS) {
-      setAssets(await getBuyOrders());
-      setBuy(false);
-      setList(true);
+    if (pathname === MARKET_ORDERS) {
+      setAssets(await getMarketBuyOrders());
+      setCancel(false);
+    } else if (pathname === USER_ORDERS) {
+      setAssets(await getUserBuyOrders());
+      setCancel(true);
     }
     setIsLoading(false);
   }, [pathname]);
@@ -56,8 +59,7 @@ export default function AssetIndex() {
         <OrderContainer
           data={assets}
           toggleAction={toggleAction}
-          buy={buy}
-          list={list}
+          cancel={cancel}
           sortData={sortData}
           filterAssets={filterAssets}
         />

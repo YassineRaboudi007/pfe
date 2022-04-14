@@ -16,7 +16,7 @@ contract OrderContract {
         uint timestamp;  
         address seller;
         address buyer;
-        bool isFullfield;
+        bool isActive;
     }
 
     struct OrderAssets{
@@ -34,7 +34,7 @@ contract OrderContract {
         uint timestamp, 
         address seller,
         address buyer,
-        bool isFullfield
+        bool isActive
 
     );
 
@@ -46,7 +46,7 @@ contract OrderContract {
         uint timestamp, 
         address seller,
         address buyer,
-        bool isFullfield
+        bool isActive
     );
 
     Order[] BuyOrders;
@@ -191,6 +191,27 @@ contract OrderContract {
         }
     } 
 
+    function getUserBuyOrders()public view returns (Order[] memory){
+        uint counter =  0;
+        uint cpt =  0;
+
+        for (uint i=0;i<buyId;i++){
+            if(BuyOrders[i].buyer == tx.origin){
+                counter++;
+            }
+        }
+        
+        Order[] memory _marketBuyOrders = new Order[](counter);
+        for (uint i=0;i<buyId;i++){
+            if(BuyOrders[i].buyer == tx.origin){
+                _marketBuyOrders[cpt] = BuyOrders[i];        
+                cpt++;
+            }
+        }
+
+        return _marketBuyOrders;
+    }
+
     function getReadyBuyOrders() public view returns(OrderAssets[] memory){
         uint counter =  0;
         uint cpt =  0;
@@ -221,5 +242,15 @@ contract OrderContract {
         }
         
         return ordersReady;
+    }
+
+    function cancelBuyOrder(uint _id) public{
+        Order storage thisOrder = BuyOrders[0];
+        for (uint i=0;i<buyId;i++){
+            if (BuyOrders[i].id == _id){
+                thisOrder = BuyOrders[i];
+            }
+        }
+        thisOrder.isActive = true;
     }
 }

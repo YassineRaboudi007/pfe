@@ -17,7 +17,8 @@ export const createContractBuyOrder = async (values: IFields) => {
     ethers.utils.parseEther(price.toString()),
     amount
   );
-  return await tx.wait();
+  if (await tx.wait()) return true;
+  return false;
 };
 
 export const createContractSellOrder = async (values: IFields) => {
@@ -60,6 +61,25 @@ export const getReadyBuyOrders = async () => {
 export const getBuyOrder = async (id: number) => {
   const OrderContract = getOrderContract();
   const res = await OrderContract.getBuyOrder(id);
-
   return res;
+};
+
+export const getMarketBuyOrders = async () => {
+  const OrderContract = getOrderContract();
+  const comps = await getAllCompanys();
+  const res = await OrderContract.getMarketBuyOrders();
+  return formatOrder(res, comps);
+};
+
+export const getUserBuyOrders = async () => {
+  const OrderContract = getOrderContract();
+  const comps = await getAllCompanys();
+  const res = await OrderContract.getUserBuyOrders();
+  return formatOrder(res, comps);
+};
+
+export const cancelBuyOrder = async (id: any) => {
+  const OrderContract = getOrderContract();
+  const tx = await OrderContract.cancelBuyOrder(id);
+  return await tx.wait();
 };

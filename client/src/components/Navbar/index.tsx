@@ -18,7 +18,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import CustomMenuList from "./MenuList";
 import {
   GET_ASSETS_URL,
-  LIST_BUY_ORDERS,
+  MARKET_ORDERS,
   SWAP_TOKENS_URL,
   ADD_ASSETS_URL,
   COMPANY_ASSETS,
@@ -29,6 +29,7 @@ import {
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
   TRANSACTION,
+  USER_ORDERS,
 } from "../../utils/NavUrls";
 import {useAppContext} from "../../provider/AppProvider";
 import {Link} from "react-router-dom";
@@ -108,7 +109,11 @@ const pages = [
       },
       {
         name: "Market Buy Orders",
-        url: LIST_BUY_ORDERS,
+        url: MARKET_ORDERS,
+      },
+      {
+        name: "User Orders",
+        url: USER_ORDERS,
       },
     ],
   },

@@ -70,10 +70,18 @@ export const getMarketAssets = async () => {
   return formatAsset(res, comps);
 };
 
-export const listContractAsset = async (comp_id: string, asset_id: any) => {
+export const listContractAsset = async (
+  comp_id: string,
+  asset_id: any,
+  price: any
+) => {
   const AssetContract = getAssetContract();
   const assetId: number = parseInt(asset_id._hex, 16);
-  const tx = await AssetContract.listAsset(comp_id, assetId);
+  const tx = await AssetContract.listAsset(
+    comp_id,
+    assetId,
+    ethers.utils.parseEther(parseFloat(price).toString())
+  );
   return await tx.wait();
 };
 

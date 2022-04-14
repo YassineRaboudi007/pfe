@@ -14,9 +14,6 @@ import CompanyAssets from "./components/AssetComponents/CompanyAssets";
 import CreateBuyOrder from "./components/Order/CreateOrder";
 import OrderList from "./components/Order/ListOrder";
 
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-
 import {
   GET_ASSETS_URL,
   COMPANY_LOGIN_URL,
@@ -27,8 +24,8 @@ import {
   ADD_ASSETS_URL,
   COMPANY_ASSETS,
   CREATE_ORDER,
-  LIST_SELL_ORDERS,
-  LIST_BUY_ORDERS,
+  MARKET_ORDERS,
+  USER_ORDERS,
   USER_ASSETS,
   TRANSACTION,
 } from "./utils/NavUrls";
@@ -55,8 +52,8 @@ function App() {
           <Route path={USER_ASSETS} element={<AssetIndex />} />
           <Route path={ADD_ASSETS_URL} element={<CreateAsset />} />
           <Route path={CREATE_ORDER} element={<CreateBuyOrder />} />
-          <Route path={LIST_SELL_ORDERS} element={<OrderList />} />
-          <Route path={LIST_BUY_ORDERS} element={<OrderList />} />
+          <Route path={MARKET_ORDERS} element={<OrderList />} />
+          <Route path={USER_ORDERS} element={<OrderList />} />
           <Route path={TRANSACTION} element={<Transaction />} />
           <Route path="*" element={<SwapContainer />} />
         </Routes>
