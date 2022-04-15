@@ -329,7 +329,86 @@ export default function PrimarySearchAppBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
+      {jwt ? (
+        <Menu
+          anchorEl={mobileMoreAnchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          id={mobileMenuId}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={isMobileMenuOpen}
+          onClose={handleMobileMenuClose}
+        >
+          <MenuItem onClick={handleMenuClose}>
+            Address : {accountAddressSlice(account)}
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            Balance : {currentBalance} LDT{" "}
+          </MenuItem>
+          <Link
+            to={TRANSACTION}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Transaction History</MenuItem>
+          </Link>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              disconnect();
+            }}
+          >
+            Disonnect Account
+          </MenuItem>
+        </Menu>
+      ) : (
+        <Menu
+          anchorEl={mobileMoreAnchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          id={mobileMenuId}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={isMobileMenuOpen}
+          onClose={handleMobileMenuClose}
+        >
+          <Link
+            to={`${USER_LOGIN_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
+          </Link>
+          <Link
+            to={`${COMPANY_LOGIN_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
+          </Link>
+
+          <Link
+            to={`${USER_SIGNUP_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
+          </Link>
+          <Link
+            to={`${COMPANY_SIGNUP_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
+          </Link>
+        </Menu>
+      )}
       {jwt ? (
         <Menu
           anchorEl={anchorEl}
