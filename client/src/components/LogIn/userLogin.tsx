@@ -55,15 +55,16 @@ export default function SignInSide() {
 
   const Login = async (e: any) => {
     e.preventDefault();
-
     if (!values.password || !values.email) {
       changeSnackBar(true, `Please Fill All Fields`, "warning");
       return;
     }
 
     const res = await getUser(values);
-
     if (res) changeSnackBar(true, `Logged In`, "success");
+    else {
+      changeSnackBar(true, `Invalid Credentials`, "error");
+    }
     connectWallet();
     setJWT(res.token);
   };
@@ -130,11 +131,6 @@ export default function SignInSide() {
                 Log In
               </Button>
               <Grid container>
-                {/* <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid> */}
                 <Grid item>
                   <Link href={USER_SIGNUP_URL} variant="body2">
                     {"Dont have an account? Sign Up"}

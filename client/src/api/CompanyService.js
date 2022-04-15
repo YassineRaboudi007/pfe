@@ -6,8 +6,13 @@ export const addCompany = async (fields) => {
 };
 
 export const getCompany = async (fields) => {
-  const res = await axios.post("http://localhost:4000/company/login", fields);
-  return res.data;
+  try {
+    const res = await axios.post("http://localhost:4000/company/login", fields);
+    if (res.data === "Invalid Credentials") return false;
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getAllCompanys = async () => {

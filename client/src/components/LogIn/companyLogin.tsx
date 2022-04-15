@@ -68,6 +68,9 @@ export default function SignInSide() {
 
     const res = await getCompany(values);
     if (res) changeSnackBar(true, `Logged In`, "success");
+    else {
+      changeSnackBar(true, `Invalid Credentials`, "error");
+    }
     setJWT(res.token);
   };
 

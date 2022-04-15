@@ -222,7 +222,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{mr: 2, display: {xs: "none", md: "flex"}}}
           >
-            LOGO
+            Linedata
           </Typography>
 
           <Box sx={{flexGrow: 1, display: {xs: "flex", md: "none"}}}>
@@ -269,7 +269,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{flexGrow: 1, display: {xs: "none", md: "none"}}}
           >
-            LOGO
+            Linedata
           </Typography>
           <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
             {pages.map((page, key) => (
@@ -284,15 +284,7 @@ export default function PrimarySearchAppBar() {
               // </Button>
             ))}
           </Box>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{"aria-label": "search"}}
-            />
-          </Search>
+
           <Box sx={{display: {xs: "none", md: "flex"}}}>
             <IconButton
               size="large"
