@@ -31,33 +31,48 @@ import {
 } from "./utils/NavUrls";
 import CustomizedSnackbars from "./components/Snackbar";
 import Transaction from "./components/Transaction/index";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {grey, cyan} from "@mui/material/colors";
+const outerTheme = createTheme({
+  palette: {
+    primary: {
+      main: grey[900],
+    },
+    secondary: {
+      main: cyan[800],
+    },
+  },
+});
 
 function App() {
   return (
     <AppProvider>
-      {/* <ChakraProvider> */}
-      <Router>
-        <Navbar />
-        <CustomizedSnackbars />
+      <ThemeProvider theme={outerTheme}>
+        {/* <ChakraProvider> */}
+        <Router>
+          <Navbar />
+          <CustomizedSnackbars />
 
-        <Routes>
-          <Route path={SWAP_TOKENS_URL} element={<SwapContainer />} />
-          <Route path={USER_SIGNUP_URL} element={<UserSignUp />} />
-          <Route path={USER_LOGIN_URL} element={<UserLogIn />} />
-          <Route path={COMPANY_SIGNUP_URL} element={<CompanySignUp />} />
-          <Route path={COMPANY_LOGIN_URL} element={<CompanyLogIn />} />
-          <Route path={COMPANY_ASSETS} element={<CompanyAssets />} />
-          <Route path={`${GET_ASSETS_URL}/:name`} element={<AssetIndex />} />
-          <Route path={GET_ASSETS_URL} element={<AssetIndex />} />
-          <Route path={USER_ASSETS} element={<AssetIndex />} />
-          <Route path={ADD_ASSETS_URL} element={<CreateAsset />} />
-          <Route path={CREATE_ORDER} element={<CreateBuyOrder />} />
-          <Route path={MARKET_ORDERS} element={<OrderList />} />
-          <Route path={USER_ORDERS} element={<OrderList />} />
-          <Route path={TRANSACTION} element={<Transaction />} />
-          <Route path="*" element={<SwapContainer />} />
-        </Routes>
-      </Router>
+          <Routes>
+            <Route path={SWAP_TOKENS_URL} element={<SwapContainer />} />
+            <Route path={USER_SIGNUP_URL} element={<UserSignUp />} />
+            <Route path={USER_LOGIN_URL} element={<UserLogIn />} />
+            <Route path={COMPANY_SIGNUP_URL} element={<CompanySignUp />} />
+            <Route path={COMPANY_LOGIN_URL} element={<CompanyLogIn />} />
+            <Route path={COMPANY_ASSETS} element={<CompanyAssets />} />
+            <Route path={`${GET_ASSETS_URL}/:name`} element={<AssetIndex />} />
+            <Route path={GET_ASSETS_URL} element={<AssetIndex />} />
+            <Route path={USER_ASSETS} element={<AssetIndex />} />
+            <Route path={ADD_ASSETS_URL} element={<CreateAsset />} />
+            <Route path={CREATE_ORDER} element={<CreateBuyOrder />} />
+            <Route path={MARKET_ORDERS} element={<OrderList />} />
+            <Route path={USER_ORDERS} element={<OrderList />} />
+            <Route path={TRANSACTION} element={<Transaction />} />
+            <Route path="*" element={<SwapContainer />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+
       {/* </ChakraProvider> */}
     </AppProvider>
   );

@@ -70,79 +70,77 @@ export default function SignInSide() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{height: "93vh"}}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={12}
-          component={Paper}
-          elevation={6}
-          square
-          sx={{display: "flex", flexDirection: "column", alignItems: "center"}}
+    <Grid container component="main" sx={{height: "93vh"}}>
+      <CssBaseline />
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={12}
+        component={Paper}
+        elevation={6}
+        square
+        sx={{display: "flex", flexDirection: "column", alignItems: "center"}}
+      >
+        <Paper
+          sx={{
+            my: 20,
+            mx: 4,
+            padding: "20px 30px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "50%",
+          }}
+          elevation={3}
         >
-          <Paper
-            sx={{
-              my: 20,
-              mx: 4,
-              padding: "20px 30px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "50%",
-            }}
-            elevation={3}
-          >
-            <Typography component="h1" variant="h5">
-              User Log In
-            </Typography>
-            <Box component="form" noValidate sx={{mt: 1}}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={onChange}
-              />
+          <Typography component="h1" variant="h5">
+            User Log In
+          </Typography>
+          <Box component="form" noValidate sx={{mt: 1}}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={onChange}
+            />
 
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={onChange}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{mt: 3, mb: 2}}
-                onClick={Login}
-              >
-                Log In
-              </Button>
-              <Grid container>
-                <Grid item>
-                  <Link href={USER_SIGNUP_URL} variant="body2">
-                    {"Dont have an account? Sign Up"}
-                  </Link>
-                </Grid>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={onChange}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{mt: 3, mb: 2}}
+              onClick={Login}
+            >
+              Log In
+            </Button>
+            <Grid container>
+              <Grid item>
+                <Link href={USER_SIGNUP_URL} variant="body2">
+                  {"Dont have an account? Sign Up"}
+                </Link>
               </Grid>
-              <Copyright sx={{mt: 5}} />
-            </Box>
-          </Paper>
-        </Grid>
+            </Grid>
+            <Copyright sx={{mt: 5}} />
+          </Box>
+        </Paper>
       </Grid>
-    </ThemeProvider>
+    </Grid>
   );
 }
 
