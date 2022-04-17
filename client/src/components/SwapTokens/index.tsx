@@ -8,7 +8,7 @@ import {
   OutlinedInput,
   Typography,
 } from "@mui/material";
-import {AppContext} from "../../provider/AppProvider";
+import { AppContext } from "../../provider/AppProvider";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
@@ -20,7 +20,7 @@ export default function SimplePaper() {
   const [amount, setAmount] = React.useState<number>(0.5);
   const [isBuying, setIsBuying] = React.useState<boolean>(true);
 
-  const {jwt, account, logout, updateAccountBalance, changeSnackBar} =
+  const { jwt, account, logout, updateAccountBalance, changeSnackBar } =
     React.useContext(AppContext);
 
   const tokenStep: number = 0.01;
@@ -56,7 +56,7 @@ export default function SimplePaper() {
     >
       <Paper
         elevation={3}
-        sx={{width: "100%", marginTop: "20%", padding: "20px"}}
+        sx={{ width: "100%", marginTop: "8vh", padding: "20px" }}
       >
         <Box
           sx={{
@@ -84,11 +84,11 @@ export default function SimplePaper() {
             Sell Tokens
           </Button>
         </Box>
-        <Box sx={{width: "90%", margin: "auto"}}>
-          <Typography variant="h3" align="center" sx={{margin: "30px"}}>
+        <Box sx={{ width: "90%", margin: "auto" }}>
+          <Typography variant="h3" align="center" sx={{ margin: "30px" }}>
             {isBuying ? "Buy" : "Sell"} Tokens
           </Typography>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h5" sx={{ m: 1 }}>
             Ethereum :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -101,7 +101,7 @@ export default function SimplePaper() {
               disabled={isBuying ? false : true}
             />
           </FormControl>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h5" sx={{ m: 1 }}>
             LDToken :
           </Typography>
           <FormControl fullWidth margin="normal">

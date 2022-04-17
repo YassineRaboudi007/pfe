@@ -1,13 +1,13 @@
-import React, {useState, useEffect, useCallback, useContext} from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   checkIfWalletAccountIsConnected,
   connectWalletAccounts,
 } from "../smart-contract/WalletAccount";
-import {getContractAccountBalance} from "../smart-contract/ContractFunctions/TokenContractFunctions";
+import { getContractAccountBalance } from "../smart-contract/ContractFunctions/TokenContractFunctions";
 import formatEther from "../utils/formatEther";
 import useContractListner from "../hooks/useContractListner";
-import {getReadyBuyOrders} from "../smart-contract/ContractFunctions/OrderContractFunctions";
-import {getCompanyMarketAssets} from "../smart-contract/ContractFunctions/AssetContractFunctions";
+import { getReadyBuyOrders } from "../smart-contract/ContractFunctions/OrderContractFunctions";
+import { getCompanyMarketAssets } from "../smart-contract/ContractFunctions/AssetContractFunctions";
 
 type LogoutType = "LogedOut" | "LogedIn" | null;
 type accountValue = string | null;
@@ -50,7 +50,7 @@ export const AppContext = React.createContext<IAppContext>({
   snackbar: null,
 });
 
-const AppProvider: React.FC = ({children}) => {
+const AppProvider: React.FC = ({ children }) => {
   const [notifications, setNotifications] = useState<any>([]);
   const [account, setAccount] = useState<accountValue>(null);
   const [logout, setLogout] = useState<LogoutType>(null);
@@ -77,7 +77,7 @@ const AppProvider: React.FC = ({children}) => {
         severity,
       });
     } else {
-      setSnackBar({...snackbar, open: false});
+      setSnackBar({ ...snackbar, open: false });
     }
   };
 
@@ -148,13 +148,13 @@ const AppProvider: React.FC = ({children}) => {
     if (account) await updateAccountBalance();
   }, [setAccVal, account]);
 
-  useEffect(() => {
-    onLoad();
-  }, [onLoad]);
+  // useEffect(() => {
+  //   onLoad();
+  // }, [onLoad]);
 
-  useEffect(() => {
-    getReadyBuyOrders().then((res: any) => setNotifications(res));
-  }, []);
+  // useEffect(() => {
+  //   getReadyBuyOrders().then((res: any) => setNotifications(res));
+  // }, []);
 
   const appContext: IAppContext = {
     account,
