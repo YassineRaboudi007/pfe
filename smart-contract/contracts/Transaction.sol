@@ -49,10 +49,10 @@ contract TransactionContract {
             Transaction memory sellerTransaction = Transaction(
                 _buyParams[i].asset_id,
                 _buyParams[i].company_id,
-                msg.sender,
+                owner,
                 _price,
                 block.timestamp,
-                true
+                false
             );
 
             AssetTransactionHistory[_buyParams[i].asset_id].push(buyerTransaction);

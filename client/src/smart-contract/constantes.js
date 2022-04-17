@@ -16,6 +16,7 @@ export const TransactionContractABI = TransactionAbi.abi;
 
 export const OrderContractAddress =
   "0xE7D4B6ec97379F6ec578B3C5ef4FF4CeBB0121A4";
+
 export const OrderContractABI = OrderAbi.abi;
 
 export const backendURl = "http://localhost:4000/";

@@ -11,15 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import {AppContext} from "../../provider/AppProvider";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import useCustomToast from "../../hooks/useCustomToast";
 import {
   createContractBuyOrder,
   createContractSellOrder,
 } from "../../smart-contract/ContractFunctions/OrderContractFunctions";
-import ConnectWalletComponent from "../AuthComponent";
-import {ArrowRightIcon, ArrowLeftIcon} from "@chakra-ui/icons";
+
 import {getAllCompanys} from "../../api/CompanyService";
 import useForm from "../../hooks/useForm";
 
@@ -28,7 +25,8 @@ export default function SimplePaper() {
   const [isBuyOrder, setIsBuyOrder] = useState<boolean>(true);
   const [companys, setCompanys] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const {jwt, account, logout, updateAccountBalance} = useContext(AppContext);
+  const {jwt, account, logout, updateAccountBalance, changeSnackBar} =
+    useContext(AppContext);
   const {toast} = useCustomToast();
   const [values, setValues] = useForm({
     company: null,
@@ -47,18 +45,24 @@ export default function SimplePaper() {
     });
   }, []);
 
-  const placeOrder = () => {
-    console.log(values);
-
+  const placeOrder = async () => {
     if (!values.company || !values.price || !values.amount) {
-      toast("Please Fill All Fields", "warning");
+      changeSnackBar(true, "Please Fill All Fields", "warning");
       return;
     }
-    isBuyOrder ? createBuyOrder() : createSellOrder();
+    if (isBuyOrder) {
+      if (await createBuyOrder()) {
+        updateAccountBalance();
+        changeSnackBar(true, "Order Created", "success");
+      }
+    } else {
+      createSellOrder();
+    }
   };
 
-  const createBuyOrder = () => {
-    createContractBuyOrder(values);
+  const createBuyOrder = async () => {
+    if (await createContractBuyOrder(values)) return true;
+    return false;
   };
   const createSellOrder = async () => {
     createContractSellOrder(values);
@@ -92,7 +96,7 @@ export default function SimplePaper() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               name="company"
-              value={companys[0]._id}
+              value={values.company ? values.company : companys[0]._id}
               label="Age"
               onChange={onChange}
             >

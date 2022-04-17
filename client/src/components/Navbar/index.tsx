@@ -18,7 +18,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import CustomMenuList from "./MenuList";
 import {
   GET_ASSETS_URL,
-  LIST_BUY_ORDERS,
+  MARKET_ORDERS,
   SWAP_TOKENS_URL,
   ADD_ASSETS_URL,
   COMPANY_ASSETS,
@@ -29,6 +29,7 @@ import {
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
   TRANSACTION,
+  USER_ORDERS,
 } from "../../utils/NavUrls";
 import {useAppContext} from "../../provider/AppProvider";
 import {Link} from "react-router-dom";
@@ -108,7 +109,11 @@ const pages = [
       },
       {
         name: "Market Buy Orders",
-        url: LIST_BUY_ORDERS,
+        url: MARKET_ORDERS,
+      },
+      {
+        name: "User Orders",
+        url: USER_ORDERS,
       },
     ],
   },
@@ -217,7 +222,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{mr: 2, display: {xs: "none", md: "flex"}}}
           >
-            LOGO
+            Linedata
           </Typography>
 
           <Box sx={{flexGrow: 1, display: {xs: "flex", md: "none"}}}>
@@ -264,7 +269,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{flexGrow: 1, display: {xs: "none", md: "none"}}}
           >
-            LOGO
+            Linedata
           </Typography>
           <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
             {pages.map((page, key) => (
@@ -279,15 +284,7 @@ export default function PrimarySearchAppBar() {
               // </Button>
             ))}
           </Box>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{"aria-label": "search"}}
-            />
-          </Search>
+
           <Box sx={{display: {xs: "none", md: "flex"}}}>
             <IconButton
               size="large"
@@ -324,7 +321,86 @@ export default function PrimarySearchAppBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
+      {jwt ? (
+        <Menu
+          anchorEl={mobileMoreAnchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          id={mobileMenuId}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={isMobileMenuOpen}
+          onClose={handleMobileMenuClose}
+        >
+          <MenuItem onClick={handleMenuClose}>
+            Address : {accountAddressSlice(account)}
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            Balance : {currentBalance} LDT{" "}
+          </MenuItem>
+          <Link
+            to={TRANSACTION}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Transaction History</MenuItem>
+          </Link>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              disconnect();
+            }}
+          >
+            Disonnect Account
+          </MenuItem>
+        </Menu>
+      ) : (
+        <Menu
+          anchorEl={mobileMoreAnchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          id={mobileMenuId}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={isMobileMenuOpen}
+          onClose={handleMobileMenuClose}
+        >
+          <Link
+            to={`${USER_LOGIN_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
+          </Link>
+          <Link
+            to={`${COMPANY_LOGIN_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
+          </Link>
+
+          <Link
+            to={`${USER_SIGNUP_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
+          </Link>
+          <Link
+            to={`${COMPANY_SIGNUP_URL}`}
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
+          </Link>
+        </Menu>
+      )}
       {jwt ? (
         <Menu
           anchorEl={anchorEl}

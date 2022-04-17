@@ -1,4 +1,4 @@
 backend/node_modules
 client/node_modules
 smart-contract/node_modules
-
+client/smart-contract/constantes

@@ -10,6 +10,11 @@ export const addUser = async (fields) => {
 };
 
 export const getUser = async (fields) => {
-  const res = await axios.post("http://localhost:4000/user/login", fields);
-  return res.data;
+  try {
+    const res = await axios.post("http://localhost:4000/user/login", fields);
+    if (res.data === "Invalid Credentials") return false;
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
 };

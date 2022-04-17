@@ -60,7 +60,7 @@ contract AssetContract {
         
     }
 
-    function listAsset(string memory _compID , uint _id) public{
+    function listAsset(string memory _compID , uint _id,uint price) public{
         Asset[] storage _compAssets = AssetListByCompany[_compID];
         Asset storage _asset = _compAssets[0];
         for (uint i=0;i<_compAssets.length;i++){
@@ -69,7 +69,9 @@ contract AssetContract {
                 break;
             }
         }
+
         _asset.isListed = true;
+        _asset.price = price;
 
         emit AssetStateChanged(
             _asset.id,

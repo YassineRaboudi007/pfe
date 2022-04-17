@@ -68,88 +68,88 @@ export default function SignInSide() {
 
     const res = await getCompany(values);
     if (res) changeSnackBar(true, `Logged In`, "success");
+    else {
+      changeSnackBar(true, `Invalid Credentials`, "error");
+    }
     setJWT(res.token);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{height: "93vh"}}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={12}
-          component={Paper}
+    <Grid container component="main" sx={{height: "93vh"}}>
+      <CssBaseline />
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={12}
+        component={Paper}
+        elevation={6}
+        square
+        sx={{display: "flex", flexDirection: "column", alignItems: "center"}}
+      >
+        <Paper
+          sx={{
+            my: 20,
+            mx: 4,
+            padding: "20px 30px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "50%",
+          }}
           elevation={6}
-          square
-          sx={{display: "flex", flexDirection: "column", alignItems: "center"}}
         >
-          <Paper
-            sx={{
-              my: 20,
-              mx: 4,
-              padding: "20px 30px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "50%",
-            }}
-            elevation={6}
-          >
-            <Typography component="h1" variant="h5">
-              Company Log In
-            </Typography>
-            <Box component="form" noValidate sx={{mt: 1}}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Name"
-                name="name"
-                autoComplete="email"
-                onChange={onChange}
-              />
+          <Typography component="h1" variant="h5">
+            Company Log In
+          </Typography>
+          <Box component="form" noValidate sx={{mt: 1}}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Name"
+              name="name"
+              autoComplete="email"
+              onChange={onChange}
+            />
 
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={onChange}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{mt: 3, mb: 2}}
-                onClick={LogIn}
-              >
-                Log In
-              </Button>
-              <Grid container>
-                {/* <Grid item xs>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={onChange}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{mt: 3, mb: 2}}
+              onClick={LogIn}
+            >
+              Log In
+            </Button>
+            <Grid container>
+              {/* <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid> */}
-                <Grid item>
-                  <Link href={COMPANY_SIGNUP_URL} variant="body2">
-                    {"Dont have an account? Sign Up"}
-                  </Link>
-                </Grid>
+              <Grid item>
+                <Link href={COMPANY_SIGNUP_URL} variant="body2">
+                  {"Dont have an account? Sign Up"}
+                </Link>
               </Grid>
-              <Copyright sx={{mt: 5}} />
-            </Box>
-          </Paper>
-        </Grid>
+            </Grid>
+          </Box>
+        </Paper>
       </Grid>
-    </ThemeProvider>
+    </Grid>
   );
 }
 

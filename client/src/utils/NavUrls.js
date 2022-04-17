@@ -17,7 +17,7 @@ export const COMPANY_ASSETS = "/asset/companys";
 
 //orders
 export const CREATE_ORDER = "/orders/create";
-export const LIST_BUY_ORDERS = "/orders/buy";
-export const LIST_SELL_ORDERS = "/orders/sell";
+export const MARKET_ORDERS = "/orders/market";
+export const USER_ORDERS = "/orders/user";
 
 export const TRANSACTION = "/transaction";

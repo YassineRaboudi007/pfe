@@ -56,7 +56,7 @@ const loginCompany = async (req, res) => {
       token: generateToken(company._id),
     });
   } else {
-    res.status(400);
+    res.send("Invalid Credentials");
   }
 };
 

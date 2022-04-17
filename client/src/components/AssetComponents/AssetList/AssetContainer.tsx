@@ -6,29 +6,16 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import {visuallyHidden} from "@mui/utils";
 import {Button, Container, InputAdornment, TextField} from "@mui/material";
 
-import {
-  ADD_ASSETS_URL,
-  COMPANY_ASSETS,
-  USER_ASSETS,
-} from "../../../utils/NavUrls";
-import {AddIcon, ArrowDownIcon, ArrowUpIcon} from "@chakra-ui/icons";
-import {Link} from "react-router-dom";
 import {buyContractAsset} from "../../../smart-contract/ContractFunctions/TransactionContractFunctions";
 import {useAppContext} from "../../../provider/AppProvider";
 import {
@@ -36,11 +23,12 @@ import {
   unlistContractAsset,
 } from "../../../smart-contract/ContractFunctions/AssetContractFunctions";
 import SearchIcon from "@mui/icons-material/Search";
+import BasicModal from "../ListModel";
 
 // import AssetsEmpty from "../../AssetsEmpty";
-import useCustomToast from "../../../hooks/useCustomToast";
-import {useState} from "react";
-import {getRoleFromJWT} from "../../../utils/decodeJWT";
+// import useCustomToast from "../../../hooks/useCustomToast";
+// import {useState} from "react";
+// import {getRoleFromJWT} from "../../../utils/decodeJWT";
 
 interface Data {
   calories: number;
@@ -50,97 +38,10 @@ interface Data {
   protein: number;
 }
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
 type Order = "asc" | "desc";
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: {[key in Key]: number | string},
-  b: {[key in Key]: number | string}
-) => number {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
 function EnhancedTableHead(props: any) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-    list,
-  } = props;
-
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+  const {onSelectAllClick, numSelected, rowCount, list} = props;
 
   return (
     <TableHead>
@@ -149,7 +50,7 @@ function EnhancedTableHead(props: any) {
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
+            checked={rowCount > 0 && numSelected === rowCount ? true : false}
             onChange={onSelectAllClick}
             inputProps={{
               "aria-label": "select all desserts",
@@ -225,14 +126,15 @@ const EnhancedTableToolbar = (props: any) => {
 export default function EnhancedTable(props: any) {
   const {currentBalance, updateAccountBalance, changeSnackBar} =
     useAppContext();
+  const [openModel, setOpenModel] = React.useState<any>(false);
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
   const [selected, setSelected] = React.useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
   const [companyInfo, setCompanyInfo] = React.useState<any>([]);
+  const [assetToList, setAssetToList] = React.useState<any>(null);
 
   const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
     const selectedIndex = isSelected(name.id);
@@ -284,13 +186,14 @@ export default function EnhancedTable(props: any) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - companyInfo.length) : 0;
 
-  const listAsset = async (asset: any) => {
-    const {company_id, id} = asset;
-    if (!props.company) {
-      if (await listContractAsset(company_id, id)) {
-        props.toggleAction();
-      }
-    }
+  const listAsset = (asset: any) => {
+    setAssetToList(asset);
+    setOpenModel(true);
+    // if (!props.company) {
+    //   if (await listContractAsset(company_id, id)) {
+    //     props.toggleAction();
+    //   }
+    // }
   };
 
   const unlistAsset = async (asset: any) => {
@@ -331,6 +234,13 @@ export default function EnhancedTable(props: any) {
 
   return (
     <Container maxWidth="lg">
+      <BasicModal
+        open={openModel}
+        setOpen={setOpenModel}
+        assetToList={assetToList}
+        toggleAction={props.toggleAction}
+      />
+
       <Box sx={{width: "100%", marginTop: "20px"}}>
         <TextField
           id="outlined-basic"
@@ -373,6 +283,7 @@ export default function EnhancedTable(props: any) {
                   const isItemSelected = isSelected(
                     parseInt(item.id).toString()
                   );
+                  console.log("item ", item);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
@@ -383,12 +294,12 @@ export default function EnhancedTable(props: any) {
                       tabIndex={-1}
                       aria-checked={isItemSelected}
                       key={item.id}
-                      selected={isItemSelected}
+                      selected={isItemSelected.length > 0 ? true : false}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
-                          checked={isItemSelected.length}
+                          checked={isItemSelected.length > 0 ? true : false}
                           inputProps={{
                             "aria-labelledby": labelId,
                           }}

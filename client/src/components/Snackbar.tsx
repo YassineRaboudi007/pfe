@@ -30,7 +30,7 @@ export default function CustomizedSnackbars() {
     <Stack spacing={2} sx={{width: "100%"}}>
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}
       >
         <Alert

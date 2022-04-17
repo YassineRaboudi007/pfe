@@ -41,6 +41,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import useCustomToast from "../../../hooks/useCustomToast";
 import {useState} from "react";
 import {getRoleFromJWT} from "../../../utils/decodeJWT";
+import {
+  activateBuyOrder,
+  cancelBuyOrder,
+} from "../../../smart-contract/ContractFunctions/OrderContractFunctions";
 
 interface Data {
   calories: number;
@@ -149,6 +153,7 @@ function EnhancedTableHead(props: any) {
         <TableCell>Price</TableCell>
         <TableCell>Issuer</TableCell>
         <TableCell>Created At</TableCell>
+        {props.cancel && <TableCell>Actions</TableCell>}
       </TableRow>
     </TableHead>
   );
@@ -191,15 +196,7 @@ const EnhancedTableToolbar = (props: any) => {
         </Typography>
       )}
       {numSelected > 0 && props.buy ? (
-        <Tooltip title="Delete">
-          <Button
-            onClick={() => {
-              props.buy ? props.buyAssets() : props.sellAssets();
-            }}
-          >
-            Buy
-          </Button>
-        </Tooltip>
+        ""
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
@@ -212,6 +209,8 @@ const EnhancedTableToolbar = (props: any) => {
 };
 
 export function OrderContainer(props: any) {
+  console.log("props ", props);
+
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
   const [selected, setSelected] = React.useState<any>([]);
@@ -272,47 +271,15 @@ export function OrderContainer(props: any) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - companyInfo.length) : 0;
 
-  const listAsset = async (asset: any) => {
-    const {company_id, id} = asset;
-    if (!props.company) {
-      if (await listContractAsset(company_id, id)) {
-        props.toggleAction();
-      }
-    }
+  const cancelOrder = async (id: any) => {
+    await cancelBuyOrder(id);
+    props.toggleAction();
   };
 
-  const unlistAsset = async (asset: any) => {
-    const {company_id, id} = asset;
-    if (!props.company) {
-      if (await unlistContractAsset(company_id, id)) {
-        props.toggleAction();
-      }
-    }
+  const activateOrder = async (id: any) => {
+    await activateBuyOrder(id);
+    props.toggleAction();
   };
-
-  const buyAssets = async () => {
-    const totalPrice = selected.reduce(
-      (prev: any, current: any) => prev + current.price,
-      0
-    );
-    const buyParams = selected.map((item: any) => {
-      return {
-        company_id: item.company_id,
-        asset_id: parseInt(item.id._hex, 16),
-      };
-    });
-
-    if (currentBalance < totalPrice) {
-      console.log("money");
-      return;
-    }
-
-    if (await buyContractAsset(buyParams, currentBalance)) {
-      props.toggleAction();
-    }
-  };
-
-  const sellAssets = () => {};
 
   return (
     <Container maxWidth="lg">
@@ -332,12 +299,7 @@ export function OrderContainer(props: any) {
           onChange={(e) => props.filterAssets(e.target.value)}
         />
         <Paper sx={{width: "100%", mb: 2}}>
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            buy={props.buy}
-            buyAssets={buyAssets}
-            sellAssets={sellAssets}
-          />
+          <EnhancedTableToolbar numSelected={selected.length} buy={props.buy} />
           <TableContainer>
             <Table
               sx={{minWidth: 750}}
@@ -351,15 +313,16 @@ export function OrderContainer(props: any) {
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={props.data.length}
-                list={props.list}
+                cancel={props.cancel}
               />
               <TableBody>
                 {props.data.map((item: any, index: number) => {
+                  console.log("item ", item);
+
                   const isItemSelected = isSelected(
                     parseInt(item.id).toString()
                   );
 
-                  const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow
                       hover
@@ -368,12 +331,31 @@ export function OrderContainer(props: any) {
                       tabIndex={-1}
                       aria-checked={isItemSelected}
                       key={item.id}
-                      selected={isItemSelected}
+                      selected={isItemSelected.length > 0 ? true : false}
                     >
                       <TableCell>{item.symbol}</TableCell>
                       <TableCell>{item.price}</TableCell>
                       <TableCell>{item.issuer}</TableCell>
                       <TableCell>{item.created_at}</TableCell>
+                      {props.cancel && (
+                        <TableCell>
+                          {item.isActive ? (
+                            <Button
+                              variant="outlined"
+                              onClick={() => cancelOrder(parseInt(item.id))}
+                            >
+                              Cancel Order
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              onClick={() => activateOrder(parseInt(item.id))}
+                            >
+                              Activate Order
+                            </Button>
+                          )}
+                        </TableCell>
+                      )}
                     </TableRow>
                   );
                 })}

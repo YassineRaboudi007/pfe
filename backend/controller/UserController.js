@@ -59,11 +59,10 @@ const loginUser = async (req, res) => {
       username: user.username,
       email: user.email,
       wallet: user.wallet,
-
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
+    res.send("Invalid Credentials");
   }
 };
 
