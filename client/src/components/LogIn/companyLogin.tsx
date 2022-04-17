@@ -1,28 +1,20 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
-
-import {addUser, getUser} from "../../api/UserService";
-
-import {useContext} from "react";
-import {AppContext, useAppContext} from "../../provider/AppProvider";
-import {COMPANY_SIGNUP_URL} from "../../utils/NavUrls";
-import {getCompany} from "../../api/CompanyService";
-import useCustomToast from "../../hooks/useCustomToast";
+import { useContext } from "react";
+import { AppContext, useAppContext } from "../../provider/AppProvider";
+import { COMPANY_SIGNUP_URL } from "../../utils/NavUrls";
+import { getCompany } from "../../api/CompanyService";
 //@ts-ignore
-const {ethereum} = window;
+const { ethereum } = window;
 
 function Copyright(props: any) {
   return (
@@ -45,7 +37,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const {setJWT, changeSnackBar} = useAppContext();
+  const { setJWT, changeSnackBar, connectWallet } = useAppContext();
   const [values, setValues] = useForm({
     name: "",
     password: "",
@@ -67,15 +59,16 @@ export default function SignInSide() {
     });
 
     const res = await getCompany(values);
-    if (res) changeSnackBar(true, `Logged In`, "success");
-    else {
-      changeSnackBar(true, `Invalid Credentials`, "error");
-    }
-    setJWT(res.token);
+    //@ts-ignore
+    changeSnackBar(true, res.msg, res.status);
+
+    connectWallet();
+
+    if (res.status === "success") setJWT(res.token.token);
   };
 
   return (
-    <Grid container component="main" sx={{height: "93vh"}}>
+    <Grid container component="main" sx={{ height: "93vh" }}>
       <CssBaseline />
       <Grid
         item
@@ -85,7 +78,7 @@ export default function SignInSide() {
         component={Paper}
         elevation={6}
         square
-        sx={{display: "flex", flexDirection: "column", alignItems: "center"}}
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
         <Paper
           sx={{
@@ -95,14 +88,13 @@ export default function SignInSide() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            width: "50%",
           }}
           elevation={6}
         >
           <Typography component="h1" variant="h5">
             Company Log In
           </Typography>
-          <Box component="form" noValidate sx={{mt: 1}}>
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -129,7 +121,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 3, mb: 2}}
+              sx={{ mt: 3, mb: 2 }}
               onClick={LogIn}
             >
               Log In

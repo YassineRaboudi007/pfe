@@ -2,8 +2,8 @@ import * as React from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, {AlertProps} from "@mui/material/Alert";
-import {AppContext} from "../provider/AppProvider";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { AppContext } from "../provider/AppProvider";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -13,7 +13,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export default function CustomizedSnackbars() {
-  const {snackbar, changeSnackBar} = React.useContext(AppContext);
+  const { snackbar, changeSnackBar } = React.useContext(AppContext);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -27,8 +27,9 @@ export default function CustomizedSnackbars() {
   };
 
   return (
-    <Stack spacing={2} sx={{width: "100%"}}>
+    <Stack spacing={2} sx={{ width: "100%" }}>
       <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={handleClose}
@@ -36,7 +37,7 @@ export default function CustomizedSnackbars() {
         <Alert
           onClose={handleClose}
           severity={snackbar.severity}
-          sx={{width: "100%"}}
+          sx={{ width: "100%" }}
         >
           {snackbar.message}
         </Alert>

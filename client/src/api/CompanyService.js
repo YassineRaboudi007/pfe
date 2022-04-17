@@ -6,12 +6,18 @@ export const addCompany = async (fields) => {
 };
 
 export const getCompany = async (fields) => {
-  try {
-    const res = await axios.post("http://localhost:4000/company/login", fields);
-    if (res.data === "Invalid Credentials") return false;
-    return res.data;
-  } catch (e) {
-    console.log(e);
+  const { data } = await axios.post(
+    "http://localhost:4000/company/login",
+    fields
+  );
+  if (data.err) {
+    return { status: "error", msg: data.err };
+  } else {
+    return {
+      status: "success",
+      msg: "Logged In Successfully",
+      token: data,
+    };
   }
 };
 

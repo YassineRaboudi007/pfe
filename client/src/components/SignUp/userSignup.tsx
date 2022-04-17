@@ -1,54 +1,29 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
-import {AppContext} from "../../provider/AppProvider";
-import {addUser} from "../../api/UserService";
-import {USER_LOGIN_URL} from "../../utils/NavUrls";
+import { AppContext } from "../../provider/AppProvider";
+import { addUser } from "../../api/UserService";
+import { USER_LOGIN_URL } from "../../utils/NavUrls";
 
 //@ts-ignore
-const {ethereum} = window;
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
+const { ethereum } = window;
 
 export default function SignInSide() {
-  const {setJWT, connectWallet} = React.useContext(AppContext);
+  const { setJWT, connectWallet, changeSnackBar } =
+    React.useContext(AppContext);
   const [values, setValues] = useForm({
     username: "",
     password: "",
     email: "",
     wallet: "",
   });
-  // const toast = useToast();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues(e);
@@ -103,9 +78,12 @@ export default function SignInSide() {
     });
 
     const res = await addUser(values);
-    connectWallet();
     console.log("sana ", res);
-    setJWT(res.token);
+    // @ts-ignore
+    changeSnackBar(true, res.msg, res.status);
+
+    connectWallet();
+    if (res.status === "success") setJWT(res.token);
   };
 
   return (
@@ -133,7 +111,12 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             User Sign Up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required
@@ -182,7 +165,8 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 3, mb: 2}}
+              sx={{ mt: 3, mb: 2 }}
+              onClick={SignUp}
             >
               Sign In
             </Button>
@@ -198,7 +182,6 @@ export default function SignInSide() {
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{mt: 5}} />
           </Box>
         </Box>
       </Grid>

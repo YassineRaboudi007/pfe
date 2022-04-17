@@ -1,6 +1,6 @@
 // @ts-nocheck
 import * as React from "react";
-import {alpha} from "@mui/material/styles";
+import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,11 +15,11 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import {Container} from "@mui/material";
+import { Container } from "@mui/material";
 
-import {getAllCompanys} from "../../api/CompanyService";
+import { getAllCompanys } from "../../api/CompanyService";
 import formatEther from "../../utils/formatEther";
-import {getUserTransactions} from "../../smart-contract/ContractFunctions/TransactionContractFunctions";
+import { getUserTransactions } from "../../smart-contract/ContractFunctions/TransactionContractFunctions";
 
 interface Data {
   calories: number;
@@ -50,13 +50,13 @@ interface EnhancedTableToolbarProps {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const {numSelected} = props;
+  const { numSelected } = props;
 
   return (
     <Toolbar
       sx={{
-        pl: {sm: 2},
-        pr: {xs: 1, sm: 1},
+        pl: { sm: 2 },
+        pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
             alpha(
@@ -68,7 +68,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     >
       {numSelected > 0 ? (
         <Typography
-          sx={{flex: "1 1 100%"}}
+          sx={{ flex: "1 1 100%" }}
           color="inherit"
           variant="subtitle1"
           component="div"
@@ -77,7 +77,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Typography
-          sx={{flex: "1 1 100%"}}
+          sx={{ flex: "1 1 100%" }}
           variant="h6"
           id="tableTitle"
           component="div"
@@ -123,11 +123,11 @@ export default function Transaction() {
 
   return (
     <Container maxWidth="lg">
-      <Box sx={{width: "100%", marginTop: "20px"}}>
-        <Paper sx={{width: "100%", mb: 2}}>
+      <Box sx={{ width: "100%", marginTop: "20px" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
           <TableContainer>
-            <Table sx={{minWidth: 750}} aria-labelledby="tableTitle">
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
               <EnhancedTableHead />
               <TableBody>
                 {transactions?.map((row: any, index: any) => {

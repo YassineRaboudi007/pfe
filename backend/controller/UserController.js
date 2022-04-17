@@ -7,17 +7,17 @@ const User = require("../models/userModel");
 // @route   POST /api/users
 // @access  Public
 const registerUser = async (req, res) => {
-  const {username, email, password, wallet} = req.body;
+  const { username, email, password, wallet } = req.body;
 
   if (!username || !email || !password || !wallet) {
     res.status(400);
   }
 
   // Check if user exists
-  const userExists = await User.findOne({email});
+  const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(400);
+    res.json({ err: "User Already Exists" });
   }
 
   // Hash password
@@ -49,10 +49,10 @@ const registerUser = async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = async (req, res) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
 
   // Check for user email
-  const user = await User.findOne({email});
+  const user = await User.findOne({ email });
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user.id,
@@ -62,7 +62,7 @@ const loginUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.send("Invalid Credentials");
+    res.json({ err: "Invalid Credentials" });
   }
 };
 
@@ -75,7 +75,7 @@ const getMe = async (req, res) => {
 
 // Generate JWT
 const generateToken = (id) => {
-  return jwt.sign({id, role: "user"}, process.env.JWT_SECRET, {
+  return jwt.sign({ id, role: "user" }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };

@@ -112,6 +112,8 @@ const AppProvider: React.FC = ({ children }) => {
 
   const connectWallet = (): void => {
     connectWalletAccounts().then((acc) => {
+      console.log("accoutn ", acc);
+
       setAccount(acc);
       setLogout("LogedIn");
     });
@@ -132,6 +134,8 @@ const AppProvider: React.FC = ({ children }) => {
     if (logout !== "LogedOut") {
       const res = await checkIfWalletAccountIsConnected();
       if (res) {
+        console.log("accoutn ", res);
+
         setAccount(res);
         setLogout("LogedIn");
         if (account) {

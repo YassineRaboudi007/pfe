@@ -7,14 +7,14 @@ const Company = require("../models/CompanyModel");
 // @route   POST /api/users
 // @access  Public
 const addCompany = async (req, res) => {
-  const {name, symbol, website, password} = req.body;
+  const { name, symbol, website, password } = req.body;
   if (!name || !website || !password || !symbol) {
     res.status(400);
   }
 
   // Check if user exists
-  const compnayBySymbol = await Company.findOne({symbol});
-  const compnayByName = await Company.findOne({name});
+  const compnayBySymbol = await Company.findOne({ symbol });
+  const compnayByName = await Company.findOne({ name });
 
   if (compnayByName || compnayBySymbol) {
     res.status(400);
@@ -37,7 +37,7 @@ const addCompany = async (req, res) => {
       token: generateToken(company._id),
     });
   } else {
-    res.status(400);
+    res.json({ err: "Some Error Occured" });
   }
 };
 
@@ -45,10 +45,10 @@ const addCompany = async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginCompany = async (req, res) => {
-  const {name, password} = req.body;
+  const { name, password } = req.body;
   console.log("name and pwd ", name, password);
   // Check for company mail
-  const company = await Company.findOne({name});
+  const company = await Company.findOne({ name });
   const companys = await Company.find();
 
   if (company && (await bcrypt.compare(password, company.password))) {
@@ -56,23 +56,23 @@ const loginCompany = async (req, res) => {
       token: generateToken(company._id),
     });
   } else {
-    res.send("Invalid Credentials");
+    res.json({ err: "Invalid Credentials" });
   }
 };
 
 const getAllCompanys = async (req, res) => {
   const companys = await Company.find();
-  res.json({companys});
+  res.json({ companys });
 };
 
 const getCompanyById = async (req, res) => {
   const company = await Company.findById(req.params.id);
-  res.json({company});
+  res.json({ company });
 };
 
 // Generate JWT
 const generateToken = (id) => {
-  return jwt.sign({id, role: "company"}, process.env.JWT_SECRET, {
+  return jwt.sign({ id, role: "company" }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };

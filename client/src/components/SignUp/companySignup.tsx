@@ -11,14 +11,14 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
-import {AppContext} from "../../provider/AppProvider";
-import {addUser} from "../../api/UserService";
-import {COMPANY_LOGIN_URL} from "../../utils/NavUrls";
+import { AppContext } from "../../provider/AppProvider";
+import { addCompany } from "../../api/CompanyService";
+import { COMPANY_LOGIN_URL } from "../../utils/NavUrls";
 
 //@ts-ignore
-const {ethereum} = window;
+const { ethereum } = window;
 
 function Copyright(props: any) {
   return (
@@ -41,70 +41,51 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const {setJWT, connectWallet} = React.useContext(AppContext);
+  const { setJWT, connectWallet, changeSnackBar } =
+    React.useContext(AppContext);
   const [values, setValues] = useForm({
-    username: "",
+    name: "",
+    symbol: "",
+    website: "",
     password: "",
-    email: "",
-    wallet: "",
   });
-  // const toast = useToast();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues(e);
     console.log(values);
   };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
 
   const SignUp = async (e: any) => {
     e.preventDefault();
-    /*
-    if (!values.username || !values.password || !values.email) {
-      toast({
-        title: ` Please Fill All Fields`,
-        status: "warning",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
 
-    if (values.password.length < 8) {
-      toast({
-        title: `Password Length Must Be at least 8`,
-        status: "warning",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (
-      values.password.toUpperCase() === values.password ||
-      values.password.toLowerCase() === values.password
-    ) {
-      toast({
-        title: `Password Contains Upper And Lower Case`,
-        status: "warning",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }*/
+    // if (!values.name || !values.website || !values.symbol) {
+    //   changeSnackBar(true, `Please Fill All Fields`, "warning");
+    //   return;
+    // }
+
+    // if (values.password.length < 8) {
+    //   changeSnackBar(true, `Password Length Must Be at least 8`, "warning");
+    //   return;
+    // }
+    // if (
+    //   values.password.toUpperCase() === values.password ||
+    //   values.password.toLowerCase() === values.password
+    // ) {
+    //   changeSnackBar(true, `Password Contains Upper And Lower Case`, "warning");
+
+    //   return;
+    // }
 
     ethereum.request({
       method: "eth_requestAccounts",
     });
 
-    const res = await addUser(values);
+    const res = await addCompany(values);
     connectWallet();
-    console.log("sana ", res);
+    if (res) changeSnackBar(true, `Logged In`, "success");
+    else {
+      changeSnackBar(true, `Invalid Credentials`, "error");
+    }
     setJWT(res.token);
   };
 
@@ -133,7 +114,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Company Sign Up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -182,7 +163,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 3, mb: 2}}
+              sx={{ mt: 3, mb: 2 }}
               onClick={SignUp}
             >
               Sign Up
@@ -199,7 +180,7 @@ export default function SignInSide() {
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{mt: 5}} />
+            <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>
       </Grid>

@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import {
   Button,
   FormControl,
+  Grid,
   InputLabel,
   OutlinedInput,
   Typography,
@@ -48,88 +49,93 @@ export default function SimplePaper() {
   };
 
   return (
-    <Box
-      sx={{
-        width: "45vw",
-        margin: "auto",
-      }}
-    >
-      <Paper
-        elevation={3}
-        sx={{ width: "100%", marginTop: "8vh", padding: "20px" }}
-      >
-        <Box
+    <Grid container sx={{ margin: "auto" }}>
+      <Grid item xs={12} md={9} lg={6} sx={{ margin: " 3vh auto" }}>
+        <Paper
+          elevation={3}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
             width: "100%",
-            marginTop: "10px",
+            padding: "20px",
+            margin: "auto",
           }}
         >
-          <Button
-            variant="contained"
-            endIcon={<ArrowForwardIosIcon />}
-            disabled={isBuying ? true : false}
-            onClick={switchPosition}
-          >
-            Buy Tokens
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<ArrowBackIosNewIcon />}
-            disabled={isBuying ? false : true}
-            onClick={switchPosition}
-          >
-            Sell Tokens
-          </Button>
-        </Box>
-        <Box sx={{ width: "90%", margin: "auto" }}>
-          <Typography variant="h3" align="center" sx={{ margin: "30px" }}>
-            {isBuying ? "Buy" : "Sell"} Tokens
-          </Typography>
-          <Typography variant="h5" sx={{ m: 1 }}>
-            Ethereum :
-          </Typography>
-          <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-amount"
-              value={amount}
-              label="Amount"
-              onChange={changedAmount}
-              disabled={isBuying ? false : true}
-            />
-          </FormControl>
-          <Typography variant="h5" sx={{ m: 1 }}>
-            LDToken :
-          </Typography>
-          <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-amount"
-              label="Amount"
-              value={amount}
-              onChange={changedAmount}
-              disabled={isBuying ? true : false}
-            />
-          </FormControl>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
+              justifyContent: "space-between",
               width: "100%",
-              margin: "40px 0",
+              marginTop: "10px",
             }}
           >
-            <Button variant="contained" onClick={swaptTokens}>
-              Swap Tokens
+            <Button
+              variant="contained"
+              endIcon={<ArrowForwardIosIcon />}
+              disabled={isBuying ? true : false}
+              onClick={switchPosition}
+            >
+              Buy Tokens
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<ArrowBackIosNewIcon />}
+              disabled={isBuying ? false : true}
+              onClick={switchPosition}
+            >
+              Sell Tokens
             </Button>
           </Box>
-        </Box>
-      </Paper>
-    </Box>
+          <Box sx={{ width: "90%", margin: "auto" }}>
+            <Typography variant="h4" align="center" sx={{ margin: "30px" }}>
+              {isBuying ? "Buy" : "Sell"} Tokens
+            </Typography>
+            <Typography variant="h5" sx={{ m: 1 }}>
+              Ethereum :
+            </Typography>
+            <FormControl fullWidth margin="normal">
+              <InputLabel htmlFor="outlined-adornment-amount">
+                Amount
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                value={amount}
+                label="Amount"
+                onChange={changedAmount}
+                disabled={isBuying ? false : true}
+              />
+            </FormControl>
+            <Typography variant="h5" sx={{ m: 1 }}>
+              LDToken :
+            </Typography>
+            <FormControl fullWidth margin="normal">
+              <InputLabel htmlFor="outlined-adornment-amount">
+                Amount
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                label="Amount"
+                value={amount}
+                onChange={changedAmount}
+                disabled={isBuying ? true : false}
+              />
+            </FormControl>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                margin: "40px 0",
+              }}
+            >
+              <Button variant="contained" onClick={swaptTokens}>
+                Swap Tokens
+              </Button>
+            </Box>
+          </Box>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 
