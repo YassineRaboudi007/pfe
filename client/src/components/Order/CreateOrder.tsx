@@ -12,11 +12,7 @@ import {
 } from "@mui/material";
 import {AppContext} from "../../provider/AppProvider";
 import useCustomToast from "../../hooks/useCustomToast";
-import {
-  createContractBuyOrder,
-  createContractSellOrder,
-} from "../../smart-contract/ContractFunctions/OrderContractFunctions";
-
+import {createContractBuyOrder} from "../../smart-contract/ContractFunctions/OrderContractFunctions";
 import {getAllCompanys} from "../../api/CompanyService";
 import useForm from "../../hooks/useForm";
 
@@ -55,17 +51,12 @@ export default function SimplePaper() {
         updateAccountBalance();
         changeSnackBar(true, "Order Created", "success");
       }
-    } else {
-      createSellOrder();
     }
   };
 
   const createBuyOrder = async () => {
     if (await createContractBuyOrder(values)) return true;
     return false;
-  };
-  const createSellOrder = async () => {
-    createContractSellOrder(values);
   };
 
   if (!companys) {
@@ -96,10 +87,11 @@ export default function SimplePaper() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               name="company"
-              value={values.company ? values.company : companys[0]._id}
+              value={values.company ? values.company : 0}
               label="Age"
               onChange={onChange}
             >
+              <MenuItem value={0}>Select a Company</MenuItem>
               {companys.map((comp: any) => (
                 <MenuItem value={comp._id}>{comp.symbol}</MenuItem>
               ))}

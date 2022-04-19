@@ -48,7 +48,6 @@ function App() {
   return (
     <AppProvider>
       <ThemeProvider theme={outerTheme}>
-        {/* <ChakraProvider> */}
         <Router>
           <Navbar />
           <CustomizedSnackbars />

@@ -3,19 +3,19 @@ import AssetAbi from "./ContractABI/AssetContract.json";
 import TransactionAbi from "./ContractABI/TransactionContract.json";
 import OrderAbi from "./ContractABI/OrderContract.json";
 
-export const LDTokenAddress = "0x013ADbe3D84cC0d1965b4f929a45a02945721493";
+export const LDTokenAddress = "0xb26C88f207B275bad12D875C7cB001F60De26365";
 export const LDTokenABI = LDTokenAbi.abi;
 
 export const AssetContractAddress =
-  "0x033bAd1c6619225C8D112169a1A999249f327877";
+  "0xcb6fc5769c8A5044e88BFbD90439fB3d190644AC";
 export const AssetContractABI = AssetAbi.abi;
 
 export const TransactionContractAddress =
-  "0x98054FBE5645De09916e642B76E15cE26d5e2499";
+  "0x8461Facc791e2E93192b6DD4489cdA1f07ca4238";
 export const TransactionContractABI = TransactionAbi.abi;
 
 export const OrderContractAddress =
-  "0x426834bE9Ca93a4145b0EC7C24A202EB300c856C";
+  "0x58Fc4B3C353F3Dbaf25457D931Be2d5d6882F2F2";
 
 export const OrderContractABI = OrderAbi.abi;
 

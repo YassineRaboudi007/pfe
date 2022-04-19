@@ -18,12 +18,9 @@ import {Button, Container, InputAdornment, TextField} from "@mui/material";
 
 import {buyContractAsset} from "../../../smart-contract/ContractFunctions/TransactionContractFunctions";
 import {useAppContext} from "../../../provider/AppProvider";
-import {
-  listContractAsset,
-  unlistContractAsset,
-} from "../../../smart-contract/ContractFunctions/AssetContractFunctions";
+import {unlistContractAsset} from "../../../smart-contract/ContractFunctions/AssetContractFunctions";
 import SearchIcon from "@mui/icons-material/Search";
-import BasicModal from "../ListModel";
+import AssetModel from "../ListModel";
 
 // import AssetsEmpty from "../../AssetsEmpty";
 // import useCustomToast from "../../../hooks/useCustomToast";
@@ -234,7 +231,7 @@ export default function EnhancedTable(props: any) {
 
   return (
     <Container maxWidth="lg">
-      <BasicModal
+      <AssetModel
         open={openModel}
         setOpen={setOpenModel}
         assetToList={assetToList}
@@ -283,7 +280,6 @@ export default function EnhancedTable(props: any) {
                   const isItemSelected = isSelected(
                     parseInt(item.id).toString()
                   );
-                  console.log("item ", item);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (

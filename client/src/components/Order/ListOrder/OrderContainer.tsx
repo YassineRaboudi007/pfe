@@ -21,7 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import {visuallyHidden} from "@mui/utils";
 import {Button, Container, InputAdornment, TextField} from "@mui/material";
-
+import EditIcon from "@mui/icons-material/Edit";
 import {
   ADD_ASSETS_URL,
   COMPANY_ASSETS,
@@ -45,6 +45,7 @@ import {
   activateBuyOrder,
   cancelBuyOrder,
 } from "../../../smart-contract/ContractFunctions/OrderContractFunctions";
+import OrderModel from "../OrderModel";
 
 interface Data {
   calories: number;
@@ -209,15 +210,15 @@ const EnhancedTableToolbar = (props: any) => {
 };
 
 export function OrderContainer(props: any) {
-  console.log("props ", props);
-
+  const {currentBalance, jwt} = useAppContext();
+  const [openModel, setOpenModel] = React.useState<any>(false);
+  const [orderToEdit, setOrderToEdit] = React.useState<any>(null);
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
   const [selected, setSelected] = React.useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const {currentBalance, jwt} = useAppContext();
 
   const [companyInfo, setCompanyInfo] = React.useState<any>([]);
 
@@ -281,8 +282,19 @@ export function OrderContainer(props: any) {
     props.toggleAction();
   };
 
+  const EditOrder = async (order: any) => {
+    setOrderToEdit(order);
+    setOpenModel(true);
+  };
+
   return (
     <Container maxWidth="lg">
+      <OrderModel
+        open={openModel}
+        setOpen={setOpenModel}
+        orderToEdit={orderToEdit}
+        toggleAction={props.toggleAction}
+      />
       <Box sx={{width: "100%", marginTop: "20px"}}>
         <TextField
           id="outlined-basic"
@@ -354,6 +366,14 @@ export function OrderContainer(props: any) {
                               Activate Order
                             </Button>
                           )}
+                          <Tooltip title="Edit" sx={{margin: "0 15px"}}>
+                            <IconButton
+                              aria-label="Edit"
+                              onClick={() => EditOrder(item)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       )}
                     </TableRow>

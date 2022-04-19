@@ -50,7 +50,6 @@ contract OrderContract {
     );
 
     Order[] BuyOrders;
-    Order[] SellOrders;
 
     constructor(address _AssetContract){
         _assetContract = AssetContract(_AssetContract);
@@ -65,7 +64,7 @@ contract OrderContract {
             block.timestamp,
             address(0),
             msg.sender,
-            false
+            true
         ));
         buyId++;
         emit BuyOrder(
@@ -76,42 +75,8 @@ contract OrderContract {
             block.timestamp,
             address(0),
             msg.sender,
-            false
+            true
         );
-    }
-
-    function createSellOrder(string memory company_id,uint price,uint quantity) public {
-        SellOrders.push(Order(
-            sellId,
-            company_id,
-            price,
-            quantity,
-            block.timestamp,
-            msg.sender,
-            address(0),
-            false
-        ));
-        sellId++;
-        emit SellOrder(
-            sellId-1,
-            company_id,
-            price,
-            quantity,
-            block.timestamp,
-            msg.sender,
-            address(0),
-            false
-        );
-    }
-    
-    function getAllSellOrders() public view returns (Order[] memory){
-        uint cpt = 0;
-        Order[] memory _sellOrders = new Order[](buyId);
-        for (uint i=0;i<sellId;i++){
-            _sellOrders[cpt] = SellOrders[i];        
-            cpt++;
-        }
-        return _sellOrders;
     }
 
     function getAllBuyOrders() public view returns (Order[] memory){
@@ -145,26 +110,6 @@ contract OrderContract {
         return _marketBuyOrders;
     }
 
-    function getMarketSellOrders() public view returns(Order[] memory){
-        uint counter =  0;
-        uint cpt =  0;
-
-        for (uint i=0;i<buyId;i++){
-            if(SellOrders[i].seller != tx.origin){
-                counter++;
-            }
-        }
-        
-        Order[] memory _marketSellOrders = new Order[](counter);
-        for (uint i=0;i<buyId;i++){
-            if(SellOrders[i].seller != tx.origin){
-                _marketSellOrders[cpt] = BuyOrders[i];        
-                cpt++;
-            }
-        }
-
-        return _marketSellOrders;
-    }
 
 
     function getCurrentCompanyBuyOrder(string memory _company_id) public view returns(Order memory){
@@ -183,13 +128,6 @@ contract OrderContract {
         }
     }
      
-    function getSellOrder(uint _id) public view returns (Order memory){
-        for (uint i=0;i<sellId;i++){
-            if (SellOrders[i].id == _id){
-                return SellOrders[i];
-            }
-        }
-    } 
 
     function getUserBuyOrders()public view returns (Order[] memory){
         uint counter =  0;
@@ -263,5 +201,17 @@ contract OrderContract {
         }
         thisOrder.isActive = true;
         thisOrder.timestamp = block.timestamp;
+    }
+
+    function modifyOrder(uint _id,uint price,uint quantity) public  {
+        Order storage _order= BuyOrders[0];
+        for (uint i=0;i<buyId;i++){
+            if (BuyOrders[i].id == _id){
+                _order =  BuyOrders[i];
+            }
+        }
+        _order.price = price;
+        _order.quantity = quantity;
+        _order.timestamp = block.timestamp;
     }
 }

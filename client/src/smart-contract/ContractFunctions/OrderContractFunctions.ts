@@ -21,24 +21,6 @@ export const createContractBuyOrder = async (values: IFields) => {
   return false;
 };
 
-export const createContractSellOrder = async (values: IFields) => {
-  const {company: companyId, price, amount} = values;
-  const OrderContract = getOrderContract();
-  const tx = await OrderContract.createSellOrder(
-    companyId,
-    ethers.utils.parseEther(price.toString()),
-    amount
-  );
-  return await tx.wait();
-};
-
-export const getSellOrders = async () => {
-  const comps = await getAllCompanys();
-  const OrderContract = getOrderContract();
-  const res = await OrderContract.getAllSellOrders();
-  return formatOrder(res, comps);
-};
-
 export const getBuyOrders = async () => {
   const comps = await getAllCompanys();
   const OrderContract = getOrderContract();
@@ -87,5 +69,19 @@ export const cancelBuyOrder = async (id: any) => {
 export const activateBuyOrder = async (id: any) => {
   const OrderContract = getOrderContract();
   const tx = await OrderContract.activateBuyOrder(id);
+  return await tx.wait();
+};
+
+export const modifyBuyOrder = async (
+  id: any,
+  price: number,
+  quantity: number
+) => {
+  const OrderContract = getOrderContract();
+  const tx = await OrderContract.modifyOrder(
+    id,
+    ethers.utils.parseEther(price.toString()),
+    quantity
+  );
   return await tx.wait();
 };

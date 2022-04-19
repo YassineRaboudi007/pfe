@@ -2,13 +2,12 @@ import {useCallback, useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 
 import {
-  getBuyOrders,
   getMarketBuyOrders,
-  getSellOrders,
   getUserBuyOrders,
 } from "../../../smart-contract/ContractFunctions/OrderContractFunctions";
 import {OrderContainer} from "./OrderContainer";
 import {MARKET_ORDERS, USER_ORDERS} from "../../../utils/NavUrls";
+import Loading from "../../Loading";
 
 export default function AssetIndex() {
   const {pathname} = useLocation();
@@ -52,6 +51,10 @@ export default function AssetIndex() {
     );
     setAssets(filterdAssets);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>

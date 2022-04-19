@@ -3,8 +3,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { InputLabel, Paper, TextField } from "@mui/material";
-import { listContractAsset } from "../../smart-contract/ContractFunctions/AssetContractFunctions";
+import {InputLabel, Paper, TextField} from "@mui/material";
+import {listContractAsset} from "../../smart-contract/ContractFunctions/AssetContractFunctions";
 
 const style = {
   position: "absolute" as "absolute",
@@ -18,7 +18,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal(props: any) {
+export default function AssetModel(props: any) {
   const [price, setPrice] = React.useState<number>(0);
   const handleClose = () => props.setOpen(false);
   const listAsset = async () => {
@@ -44,7 +44,7 @@ export default function BasicModal(props: any) {
         <Box sx={style}>
           <InputLabel
             htmlFor="outlined-adornment-amount"
-            sx={{ marginBottom: "10px" }}
+            sx={{marginBottom: "10px"}}
           >
             Listing Price
           </InputLabel>
@@ -65,7 +65,7 @@ export default function BasicModal(props: any) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            sx={{ margin: "20px" }}
+            sx={{margin: "20px"}}
             onClick={listAsset}
           >
             <Button variant="contained">List Asset</Button>
