@@ -180,15 +180,6 @@ const EnhancedTableToolbar = (props: any) => {
           Data
         </Typography>
       )}
-      {numSelected > 0 && props.buy ? (
-        ""
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
     </Toolbar>
   );
 };

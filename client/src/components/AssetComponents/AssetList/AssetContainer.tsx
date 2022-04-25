@@ -99,7 +99,7 @@ const EnhancedTableToolbar = (props: any) => {
           Data
         </Typography>
       )}
-      {numSelected > 0 && props.buy ? (
+      {numSelected > 0 && props.buy && (
         <Tooltip title="Delete">
           <Button
             onClick={() => {
@@ -108,12 +108,6 @@ const EnhancedTableToolbar = (props: any) => {
           >
             Buy
           </Button>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
         </Tooltip>
       )}
     </Toolbar>
