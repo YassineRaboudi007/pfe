@@ -11,38 +11,17 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
-import { AppContext } from "../../provider/AppProvider";
-import { addUser, getUser } from "../../api/UserService";
-import { USER_LOGIN_URL, USER_SIGNUP_URL } from "../../utils/NavUrls";
+import {AppContext} from "../../provider/AppProvider";
+import {addUser, getUser} from "../../api/UserService";
+import {USER_LOGIN_URL, USER_SIGNUP_URL} from "../../utils/NavUrls";
 
 //@ts-ignore
-const { ethereum } = window;
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
 
 export default function SignInSide() {
-  const { setJWT, connectWallet } = React.useContext(AppContext);
-  const { changeSnackBar } = React.useContext(AppContext);
+  const {setJWT, connectWallet} = React.useContext(AppContext);
+  const {changeSnackBar} = React.useContext(AppContext);
 
   const [values, setValues] = useForm({
     password: "",
@@ -69,17 +48,20 @@ export default function SignInSide() {
   };
 
   return (
-    <Grid container component="main" sx={{ height: "93vh" }}>
-      <CssBaseline />
+    <Grid container sx={{height: "93vh", backgroundColor: "red"}}>
       <Grid
         item
         xs={12}
         sm={12}
         md={12}
         component={Paper}
-        elevation={6}
         square
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          backgroundColor: "#ededed",
+        }}
       >
         <Paper
           sx={{
@@ -95,7 +77,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             User Log In
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box component="form" noValidate sx={{mt: 1}}>
             <TextField
               margin="normal"
               required
@@ -105,6 +87,7 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               onChange={onChange}
+              color="secondary"
             />
 
             <TextField
@@ -117,24 +100,29 @@ export default function SignInSide() {
               id="password"
               autoComplete="current-password"
               onChange={onChange}
+              color="secondary"
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{mt: 3, mb: 2}}
               onClick={Login}
+              color="secondary"
             >
               Log In
             </Button>
             <Grid container>
               <Grid item>
-                <Link href={USER_SIGNUP_URL} variant="body2">
+                <Link
+                  href={USER_SIGNUP_URL}
+                  variant="body2"
+                  sx={{color: "black"}}
+                >
                   {"Dont have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{ mt: 5 }} />
           </Box>
         </Paper>
       </Grid>

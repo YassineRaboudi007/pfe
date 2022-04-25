@@ -13,6 +13,15 @@ contract LDToken is IERC20,Ownable,ReentrancyGuard {
     uint _totalSupply;
     address public TransactionContract;
     
+    struct Transaction{
+        address from;
+        address to;
+        uint tokenCount;
+    }
+
+    Transaction[] transactions;
+
+
     mapping(address => uint) public balances;
     mapping (address => mapping (address => uint)) public allowed;
 
@@ -47,13 +56,6 @@ contract LDToken is IERC20,Ownable,ReentrancyGuard {
         emit Approval(msg.sender,spender,amount);
         return true;
     }
-
-    // function approveContract(address sender,uint256 amount) internal  returns (bool){
-    //     require(sender != address(0),"Account address is empty");  
-    //     allowed[sender][TransactionContract] += amount;
-    //     emit Approval(sender,TransactionContract,amount);
-    //     return true;
-    // }
 
     function transferFrom(
         address from,

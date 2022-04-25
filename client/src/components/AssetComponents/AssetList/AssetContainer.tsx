@@ -45,7 +45,7 @@ function EnhancedTableHead(props: any) {
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
-            color="primary"
+            color="secondary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount ? true : false}
             onChange={onSelectAllClick}
@@ -230,14 +230,13 @@ export default function EnhancedTable(props: any) {
   const sellAssets = () => {};
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{position: "absolute", top: "10%"}}>
       <AssetModel
         open={openModel}
         setOpen={setOpenModel}
         assetToList={assetToList}
         toggleAction={props.toggleAction}
       />
-
       <Box sx={{width: "100%", marginTop: "20px"}}>
         <TextField
           id="outlined-basic"
@@ -251,6 +250,7 @@ export default function EnhancedTable(props: any) {
               </InputAdornment>
             ),
           }}
+          color="secondary"
           onChange={(e) => props.filterAssets(e.target.value)}
         />
         <Paper sx={{width: "100%", mb: 2}}>
@@ -294,7 +294,7 @@ export default function EnhancedTable(props: any) {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          color="primary"
+                          color="secondary"
                           checked={isItemSelected.length > 0 ? true : false}
                           inputProps={{
                             "aria-labelledby": labelId,
@@ -309,6 +309,7 @@ export default function EnhancedTable(props: any) {
                           <Button
                             onClick={() => unlistAsset(item)}
                             variant="outlined"
+                            color="secondary"
                           >
                             Unlist
                           </Button>
@@ -319,6 +320,7 @@ export default function EnhancedTable(props: any) {
                           <Button
                             onClick={() => listAsset(item)}
                             variant="outlined"
+                            color="secondary"
                           >
                             List
                           </Button>

@@ -11,6 +11,7 @@ import {
   Select,
   Typography,
   Paper,
+  TextField,
 } from "@mui/material";
 
 import {getCompanyById} from "../../api/CompanyService";
@@ -31,17 +32,13 @@ const style = {
 };
 
 export default function OrderModel(props: any) {
-  console.log("model props ", props);
+  console.log("props sana ", props);
 
-  const [amount, setAmount] = useState<number>(0.5);
-  const [isBuyOrder, setIsBuyOrder] = useState<boolean>(true);
   const [company, setCompany] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const {jwt, account, logout, updateAccountBalance, changeSnackBar} =
-    useAppContext();
+  const {changeSnackBar} = useAppContext();
   const [values, setValues] = useForm({
-    price: 0.5,
-    amount: 1,
+    price: props.orderToEdit.price,
+    amount: props.orderToEdit.quantity,
   });
 
   const onChange = (e: any) => {
@@ -62,6 +59,7 @@ export default function OrderModel(props: any) {
       await modifyBuyOrder(props.orderToEdit.id, values.price, values.amount)
     ) {
       props.toggleAction();
+      changeSnackBar(true, "Order Modified", "success");
     }
   };
 
@@ -83,42 +81,40 @@ export default function OrderModel(props: any) {
                 Company :
               </Typography>
               <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="outlined-adornment-amount">
-                  Company
-                </InputLabel>
-                <OutlinedInput
+                <TextField
                   id="outlined-adornment-amount"
-                  label="Amount"
+                  label="Company"
                   value={company.symbol}
                   disabled
+                  variant="standard"
                 />
               </FormControl>
               <Typography variant="h5" sx={{m: 1}}>
                 Amount :
               </Typography>
               <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="outlined-adornment-amount">
-                  Amount
-                </InputLabel>
-                <OutlinedInput
+                <TextField
                   id="outlined-adornment-amount"
                   label="Amount"
-                  value={amount}
+                  name="amount"
+                  value={values.amount}
                   onChange={onChange}
+                  color="secondary"
+                  variant="standard"
                 />
               </FormControl>
               <Typography variant="h5" sx={{m: 1}}>
                 Max asset buy price :
               </Typography>
               <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="outlined-adornment-amount">
-                  Price
-                </InputLabel>
-                <OutlinedInput
+                <TextField
                   id="outlined-adornment-amount"
                   label="Price"
-                  value={amount}
+                  name="price"
+                  value={values.price}
                   onChange={onChange}
+                  color="secondary"
+                  variant="standard"
                 />
               </FormControl>
               <Box
@@ -130,7 +126,11 @@ export default function OrderModel(props: any) {
                   margin: "40px 0",
                 }}
               >
-                <Button variant="contained" onClick={ModifyOrder}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={ModifyOrder}
+                >
                   Modify Order
                 </Button>
               </Box>

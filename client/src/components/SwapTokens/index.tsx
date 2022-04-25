@@ -9,7 +9,7 @@ import {
   OutlinedInput,
   Typography,
 } from "@mui/material";
-import { AppContext } from "../../provider/AppProvider";
+import {AppContext} from "../../provider/AppProvider";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
@@ -21,7 +21,7 @@ export default function SimplePaper() {
   const [amount, setAmount] = React.useState<number>(0.5);
   const [isBuying, setIsBuying] = React.useState<boolean>(true);
 
-  const { jwt, account, logout, updateAccountBalance, changeSnackBar } =
+  const {updateAccountBalance, changeSnackBar, currentBalance} =
     React.useContext(AppContext);
 
   const tokenStep: number = 0.01;
@@ -41,6 +41,10 @@ export default function SimplePaper() {
         ? changeSnackBar(true, "Bought Tokens", "success")
         : changeSnackBar(true, "Error Occured", "error");
     } else {
+      if (currentBalance < amount) {
+        changeSnackBar(true, "You Dont Have Enough Tokens", "error");
+        return;
+      }
       (await sellLDTokens(amount))
         ? changeSnackBar(true, "Sold Tokens", "success")
         : changeSnackBar(true, "Error Occured", "error");
@@ -49,14 +53,12 @@ export default function SimplePaper() {
   };
 
   return (
-    <Grid container sx={{ margin: "auto" }}>
-      <Grid item xs={12} md={9} lg={6} sx={{ margin: " 3vh auto" }}>
+    <Grid container>
+      <Grid item xs={12} md={9} lg={6} sx={{margin: "auto"}}>
         <Paper
           elevation={3}
           sx={{
-            width: "100%",
-            padding: "20px",
-            margin: "auto",
+            padding: "40px 20px",
           }}
         >
           <Box
@@ -65,7 +67,6 @@ export default function SimplePaper() {
               alignItems: "center",
               justifyContent: "space-between",
               width: "100%",
-              marginTop: "10px",
             }}
           >
             <Button
@@ -73,6 +74,7 @@ export default function SimplePaper() {
               endIcon={<ArrowForwardIosIcon />}
               disabled={isBuying ? true : false}
               onClick={switchPosition}
+              color="secondary"
             >
               Buy Tokens
             </Button>
@@ -81,15 +83,16 @@ export default function SimplePaper() {
               startIcon={<ArrowBackIosNewIcon />}
               disabled={isBuying ? false : true}
               onClick={switchPosition}
+              color="secondary"
             >
               Sell Tokens
             </Button>
           </Box>
-          <Box sx={{ width: "90%", margin: "auto" }}>
-            <Typography variant="h4" align="center" sx={{ margin: "30px" }}>
+          <Box sx={{width: "90%", margin: "auto"}}>
+            <Typography variant="h4" align="center" sx={{margin: "30px"}}>
               {isBuying ? "Buy" : "Sell"} Tokens
             </Typography>
-            <Typography variant="h5" sx={{ m: 1 }}>
+            <Typography variant="h5" sx={{m: 1}}>
               Ethereum :
             </Typography>
             <FormControl fullWidth margin="normal">
@@ -104,7 +107,7 @@ export default function SimplePaper() {
                 disabled={isBuying ? false : true}
               />
             </FormControl>
-            <Typography variant="h5" sx={{ m: 1 }}>
+            <Typography variant="h5" sx={{m: 1}}>
               LDToken :
             </Typography>
             <FormControl fullWidth margin="normal">
@@ -128,7 +131,11 @@ export default function SimplePaper() {
                 margin: "40px 0",
               }}
             >
-              <Button variant="contained" onClick={swaptTokens}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={swaptTokens}
+              >
                 Swap Tokens
               </Button>
             </Box>

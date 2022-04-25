@@ -1,11 +1,9 @@
 import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
+
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -16,6 +14,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import CustomMenuList from "./MenuList";
+
 import {
   GET_ASSETS_URL,
   MARKET_ORDERS,
@@ -25,39 +24,38 @@ import {
   COMPANY_LOGIN_URL,
   COMPANY_SIGNUP_URL,
   CREATE_ORDER,
-  USER_ASSETS,
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
   TRANSACTION,
-  USER_ORDERS,
 } from "../../utils/NavUrls";
-import { useAppContext } from "../../provider/AppProvider";
-import { Link } from "react-router-dom";
-import { accountAddressSlice } from "../../utils/helperFunctions";
+import {useAppContext} from "../../provider/AppProvider";
+import {Link} from "react-router-dom";
+import {accountAddressSlice} from "../../utils/helperFunctions";
+import {Button, Tooltip} from "@mui/material";
+import logo from "../../assets/linedatalogo.jpg";
+import AccountMenu from "./MenuDropDown";
+import AddIcon from "@mui/icons-material/Add";
+import BusinessIcon from "@mui/icons-material/Business";
+import StorefrontIcon from "@mui/icons-material/Storefront";
 
 const pages = [
-  {
-    name: "Swap Tokens",
-    url: SWAP_TOKENS_URL,
-  },
   {
     name: "Assets",
     listItems: [
       {
         name: "Add Asset",
         url: ADD_ASSETS_URL,
-      },
-      {
-        name: "Your Assets",
-        url: USER_ASSETS,
+        icon: <AddIcon />,
       },
       {
         name: "Company Assets",
         url: COMPANY_ASSETS,
+        icon: <BusinessIcon />,
       },
       {
         name: "Market Assets",
         url: GET_ASSETS_URL,
+        icon: <StorefrontIcon />,
       },
     ],
   },
@@ -67,20 +65,19 @@ const pages = [
       {
         name: "Create Order",
         url: CREATE_ORDER,
+        icon: <AddIcon />,
       },
       {
-        name: "Market Buy Orders",
+        name: "Market Orders",
         url: MARKET_ORDERS,
-      },
-      {
-        name: "User Orders",
-        url: USER_ORDERS,
+        icon: <StorefrontIcon />,
       },
     ],
   },
 ];
+
 export default function PrimarySearchAppBar() {
-  const { jwt, account, currentBalance, disconnect } = useAppContext();
+  const {jwt, account, currentBalance, disconnect} = useAppContext();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -89,10 +86,6 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
@@ -100,10 +93,6 @@ export default function PrimarySearchAppBar() {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -132,19 +121,12 @@ export default function PrimarySearchAppBar() {
   const mobileMenuId = "primary-search-account-menu-mobile";
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{flexGrow: 1}}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-          >
-            Linedata
-          </Typography>
+          <img src={logo} alt="Logo" height={65} width={150} />
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{flexGrow: 1, display: {xs: "flex", md: "none"}}}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -170,41 +152,37 @@ export default function PrimarySearchAppBar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: "block", md: "none" },
+                display: {xs: "block", md: "none"},
               }}
             >
               {pages.map((page, key) => (
                 <CustomMenuList key={key} page={page} />
-
-                // <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                //   <Typography textAlign="center">{page.name}</Typography>
-                // </MenuItem>
               ))}
             </Menu>
           </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", md: "none" } }}
-          >
-            Linedata
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+
+          <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
             {pages.map((page, key) => (
               <CustomMenuList key={key} page={page} />
-
-              // <Button
-              //   key={page.name}
-              //   onClick={handleCloseNavMenu}
-              //   sx={{my: 2, color: "white", display: "block"}}
-              // >
-              //   {page.name}
-              // </Button>
             ))}
           </Box>
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{display: {xs: "none", md: "flex", alignItems: "center"}}}>
+            {jwt ? (
+              <Tooltip title="Swap Tokens">
+                <Link
+                  to={SWAP_TOKENS_URL}
+                  style={{color: "inherit", textDecoration: "none"}}
+                >
+                  <Button variant="contained" color="secondary">
+                    Balance : {currentBalance} LDT{" "}
+                  </Button>
+                </Link>
+              </Tooltip>
+            ) : (
+              ""
+            )}
+
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
@@ -214,7 +192,11 @@ export default function PrimarySearchAppBar() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton
+            <AccountMenu
+              userConnected={jwt ? true : false}
+              currentBalance={currentBalance}
+            />
+            {/* <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -223,11 +205,28 @@ export default function PrimarySearchAppBar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
-            </IconButton>
+              
+               <AccountCircle /> 
+            </IconButton> */}
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
+          <Box sx={{display: {xs: "flex", md: "none"}}}>
+            <Tooltip title="Swap Tokens">
+              <Link
+                to={SWAP_TOKENS_URL}
+                style={{color: "inherit", textDecoration: "none"}}
+              >
+                <Button variant="contained" color="secondary">
+                  Balance : {currentBalance} LDT{" "}
+                </Button>
+              </Link>
+            </Tooltip>
+
+            <AccountMenu
+              userConnected={jwt ? true : false}
+              currentBalance={currentBalance}
+            />
+
+            {/* <IconButton
               size="large"
               aria-label="show more"
               aria-controls={mobileMenuId}
@@ -236,7 +235,7 @@ export default function PrimarySearchAppBar() {
               color="inherit"
             >
               <MoreIcon />
-            </IconButton>
+            </IconButton> */}
           </Box>
         </Toolbar>
       </AppBar>
@@ -264,7 +263,7 @@ export default function PrimarySearchAppBar() {
           </MenuItem>
           <Link
             to={TRANSACTION}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Transaction History</MenuItem>
           </Link>
@@ -295,26 +294,26 @@ export default function PrimarySearchAppBar() {
         >
           <Link
             to={`${USER_LOGIN_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_LOGIN_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
           </Link>
 
           <Link
             to={`${USER_SIGNUP_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_SIGNUP_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
           </Link>
@@ -339,12 +338,10 @@ export default function PrimarySearchAppBar() {
           <MenuItem onClick={handleMenuClose}>
             Address : {accountAddressSlice(account)}
           </MenuItem>
-          <MenuItem onClick={handleMenuClose}>
-            Balance : {currentBalance} LDT{" "}
-          </MenuItem>
+
           <Link
             to={TRANSACTION}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Transaction History</MenuItem>
           </Link>
@@ -375,26 +372,26 @@ export default function PrimarySearchAppBar() {
         >
           <Link
             to={`${USER_LOGIN_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_LOGIN_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
           </Link>
 
           <Link
             to={`${USER_SIGNUP_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_SIGNUP_URL}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{textDecoration: "none", color: "inherit"}}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
           </Link>

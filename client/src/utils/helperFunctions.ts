@@ -29,8 +29,6 @@ export const formatAsset = (assets: any, companys: any) => {
 };
 
 export const formatOrder = (orders: any, companys: any) => {
-  console.log(orders);
-
   const res = orders.map((order: any) => {
     const companySymbol = companys.filter(
       (el: any) => el._id === order.company_id

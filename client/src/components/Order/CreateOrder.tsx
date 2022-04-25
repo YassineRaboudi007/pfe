@@ -75,10 +75,10 @@ export default function SimplePaper() {
         sx={{width: "100%", marginTop: "10%", padding: "20px"}}
       >
         <Box sx={{width: "90%", margin: "auto"}}>
-          <Typography variant="h4" align="center" sx={{margin: "50px"}}>
+          <Typography variant="h5" align="center" sx={{margin: "30px"}}>
             Create Buy Order
           </Typography>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h6" sx={{m: 1}}>
             Company :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -97,7 +97,7 @@ export default function SimplePaper() {
               ))}
             </Select>
           </FormControl>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h6" sx={{m: 1}}>
             Amount :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -109,7 +109,7 @@ export default function SimplePaper() {
               onChange={onChange}
             />
           </FormControl>
-          <Typography variant="h5" sx={{m: 1}}>
+          <Typography variant="h6" sx={{m: 1}}>
             Max asset buy price :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -130,7 +130,7 @@ export default function SimplePaper() {
               margin: "40px 0",
             }}
           >
-            <Button variant="contained" onClick={placeOrder}>
+            <Button variant="contained" color="secondary" onClick={placeOrder}>
               Place Order
             </Button>
           </Box>

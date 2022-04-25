@@ -6,41 +6,24 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import {visuallyHidden} from "@mui/utils";
-import {Button, Container, InputAdornment, TextField} from "@mui/material";
+import {
+  Alert,
+  Button,
+  Container,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  ADD_ASSETS_URL,
-  COMPANY_ASSETS,
-  USER_ASSETS,
-} from "../../../utils/NavUrls";
-import {AddIcon, ArrowDownIcon, ArrowUpIcon} from "@chakra-ui/icons";
-import {Link} from "react-router-dom";
-import {buyContractAsset} from "../../../smart-contract/ContractFunctions/TransactionContractFunctions";
 import {useAppContext} from "../../../provider/AppProvider";
-import {
-  listContractAsset,
-  unlistContractAsset,
-} from "../../../smart-contract/ContractFunctions/AssetContractFunctions";
 import SearchIcon from "@mui/icons-material/Search";
 
-// import AssetsEmpty from "../../AssetsEmpty";
-import useCustomToast from "../../../hooks/useCustomToast";
-import {useState} from "react";
-import {getRoleFromJWT} from "../../../utils/decodeJWT";
 import {
   activateBuyOrder,
   cancelBuyOrder,
@@ -153,6 +136,7 @@ function EnhancedTableHead(props: any) {
         <TableCell>Company Symbol</TableCell>
         <TableCell>Price</TableCell>
         <TableCell>Issuer</TableCell>
+        <TableCell>Status</TableCell>
         <TableCell>Created At</TableCell>
         {props.cancel && <TableCell>Actions</TableCell>}
       </TableRow>
@@ -210,7 +194,6 @@ const EnhancedTableToolbar = (props: any) => {
 };
 
 export function OrderContainer(props: any) {
-  const {currentBalance, jwt} = useAppContext();
   const [openModel, setOpenModel] = React.useState<any>(false);
   const [orderToEdit, setOrderToEdit] = React.useState<any>(null);
   const [order, setOrder] = React.useState<Order>("asc");
@@ -288,13 +271,15 @@ export function OrderContainer(props: any) {
   };
 
   return (
-    <Container maxWidth="lg">
-      <OrderModel
-        open={openModel}
-        setOpen={setOpenModel}
-        orderToEdit={orderToEdit}
-        toggleAction={props.toggleAction}
-      />
+    <Container maxWidth="lg" sx={{position: "absolute", top: "10%"}}>
+      {orderToEdit && (
+        <OrderModel
+          open={openModel}
+          setOpen={setOpenModel}
+          orderToEdit={orderToEdit}
+          toggleAction={props.toggleAction}
+        />
+      )}
       <Box sx={{width: "100%", marginTop: "20px"}}>
         <TextField
           id="outlined-basic"
@@ -308,6 +293,7 @@ export function OrderContainer(props: any) {
               </InputAdornment>
             ),
           }}
+          color="secondary"
           onChange={(e) => props.filterAssets(e.target.value)}
         />
         <Paper sx={{width: "100%", mb: 2}}>
@@ -348,18 +334,31 @@ export function OrderContainer(props: any) {
                       <TableCell>{item.symbol}</TableCell>
                       <TableCell>{item.price}</TableCell>
                       <TableCell>{item.issuer}</TableCell>
+                      <TableCell>
+                        {item.isActive ? (
+                          <Alert icon={false} severity="warning">
+                            Pending
+                          </Alert>
+                        ) : (
+                          <Alert icon={false} severity="success">
+                            Fullfield
+                          </Alert>
+                        )}
+                      </TableCell>
                       <TableCell>{item.created_at}</TableCell>
                       {props.cancel && (
                         <TableCell>
                           {item.isActive ? (
                             <Button
-                              variant="outlined"
                               onClick={() => cancelOrder(parseInt(item.id))}
+                              color="secondary"
+                              variant="outlined"
                             >
                               Cancel Order
                             </Button>
                           ) : (
                             <Button
+                              color="secondary"
                               variant="outlined"
                               onClick={() => activateOrder(parseInt(item.id))}
                             >
@@ -370,6 +369,7 @@ export function OrderContainer(props: any) {
                             <IconButton
                               aria-label="Edit"
                               onClick={() => EditOrder(item)}
+                              color="secondary"
                             >
                               <EditIcon />
                             </IconButton>

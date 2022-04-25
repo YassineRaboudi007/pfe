@@ -11,14 +11,14 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
-import { AppContext } from "../../provider/AppProvider";
-import { addCompany } from "../../api/CompanyService";
-import { COMPANY_LOGIN_URL } from "../../utils/NavUrls";
+import {AppContext} from "../../provider/AppProvider";
+import {addCompany} from "../../api/CompanyService";
+import {COMPANY_LOGIN_URL} from "../../utils/NavUrls";
 
 //@ts-ignore
-const { ethereum } = window;
+const {ethereum} = window;
 
 function Copyright(props: any) {
   return (
@@ -41,8 +41,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const { setJWT, connectWallet, changeSnackBar } =
-    React.useContext(AppContext);
+  const {setJWT, connectWallet, changeSnackBar} = React.useContext(AppContext);
   const [values, setValues] = useForm({
     name: "",
     symbol: "",
@@ -114,7 +113,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Company Sign Up
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box component="form" noValidate sx={{mt: 1}}>
             <TextField
               margin="normal"
               required
@@ -125,6 +124,7 @@ export default function SignInSide() {
               id="password"
               autoComplete="current-password"
               onChange={onChange}
+              color="secondary"
               autoFocus
             />
             <TextField
@@ -136,6 +136,7 @@ export default function SignInSide() {
               name="symbol"
               autoComplete="email"
               onChange={onChange}
+              color="secondary"
             />
             <TextField
               margin="normal"
@@ -146,6 +147,7 @@ export default function SignInSide() {
               name="website"
               autoComplete="email"
               onChange={onChange}
+              color="secondary"
             />
             <TextField
               margin="normal"
@@ -157,14 +159,16 @@ export default function SignInSide() {
               id="password"
               autoComplete="current-password"
               onChange={onChange}
+              color="secondary"
             />
 
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{mt: 3, mb: 2}}
               onClick={SignUp}
+              color="secondary"
             >
               Sign Up
             </Button>
@@ -175,12 +179,15 @@ export default function SignInSide() {
                   </Link>
                 </Grid> */}
               <Grid item>
-                <Link href={COMPANY_LOGIN_URL} variant="body2">
+                <Link
+                  href={COMPANY_LOGIN_URL}
+                  variant="body2"
+                  sx={{color: "black"}}
+                >
                   {"Already have An Account ? Sign In"}
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>
       </Grid>

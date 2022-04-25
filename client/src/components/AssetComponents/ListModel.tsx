@@ -30,6 +30,7 @@ export default function AssetModel(props: any) {
       )
     ) {
       props.toggleAction();
+      handleClose();
     }
   };
 
@@ -58,6 +59,7 @@ export default function AssetModel(props: any) {
               setPrice(parseFloat(e.target.value));
             }}
             fullWidth
+            color="secondary"
           />
           <Box
             style={{
@@ -68,7 +70,9 @@ export default function AssetModel(props: any) {
             sx={{margin: "20px"}}
             onClick={listAsset}
           >
-            <Button variant="contained">List Asset</Button>
+            <Button variant="contained" color="secondary">
+              List Asset
+            </Button>
           </Box>
         </Box>
       </Modal>

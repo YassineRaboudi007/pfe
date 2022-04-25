@@ -1,6 +1,4 @@
-import {Box, Button, Flex} from "@chakra-ui/react";
-import {Link} from "react-router-dom";
-import {USER_SIGNUP_URL} from "../utils/NavUrls";
+import {Box, Flex} from "@chakra-ui/react";
 
 const AssetsEmpty = () => {
   return (
@@ -14,7 +12,7 @@ const AssetsEmpty = () => {
       mt={40}
     >
       <Flex justify={"center"} flexDir={"column"} alignItems={"center"}>
-        There are no assets here
+        No Data To Show
       </Flex>
     </Box>
   );

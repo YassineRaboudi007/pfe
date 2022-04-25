@@ -24,6 +24,7 @@ export default function AssetIndex() {
     if (pathname === MARKET_ORDERS) {
       setAssets(await getMarketBuyOrders());
       setCancel(false);
+      console.log("lol", await getMarketBuyOrders());
     } else if (pathname === USER_ORDERS) {
       setAssets(await getUserBuyOrders());
       setCancel(true);
