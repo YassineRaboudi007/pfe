@@ -54,6 +54,12 @@ export const getCompanyAssets = async (name: string) => {
   return formatAsset(res, comps);
 };
 
+export const getAsset = async (compId: any, assetId: any) => {
+  const AssetContract = getAssetContract();
+  const res = await AssetContract.getAsset(compId, assetId);
+  return res;
+};
+
 export const getOwnerAssets = async () => {
   const comps = await getAllCompanys();
   const compsID: any = comps.map((el: any) => el._id);
@@ -94,8 +100,7 @@ export const unlistContractAsset = async (comp_id: string, asset_id: any) => {
 
 export const ContractBuyOrderItems = async (
   company_id: string,
-  price: number,
-  owner: string
+  price: number
 ) => {
   const AssetContract = getAssetContract();
   const res = AssetContract.getBuyOrderItems(company_id, price);

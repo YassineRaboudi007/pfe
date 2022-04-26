@@ -1,31 +1,39 @@
-// @ts-nocheck
 import * as React from "react";
-import {
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  AvatarBadge,
-  Button,
-} from "@chakra-ui/react";
+import Box from "@mui/material/Box";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import {useAppContext} from "../provider/AppProvider";
-import {
-  getBuyOrder,
-  getBuyOrders,
-} from "../smart-contract/ContractFunctions/OrderContractFunctions";
+import {getBuyOrder} from "../smart-contract/ContractFunctions/OrderContractFunctions";
 import {getAllCompanys} from "../api/CompanyService";
 import {formatNotif} from "../utils/helperFunctions";
+import {Badge, Button} from "@mui/material";
+import {getAsset} from "../smart-contract/ContractFunctions/AssetContractFunctions";
+import formatEther from "../utils/formatEther";
+import {buyContractAsset} from "../smart-contract/ContractFunctions/TransactionContractFunctions";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
-export default function NotificationComponent() {
-  const {notifications} = useAppContext();
+export default function AccountMenu() {
+  const {notifications, currentBalance, changeSnackBar, updateAccountBalance} =
+    useAppContext();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const [formatedNotifications, setFormatedNotifications] = React.useState<any>(
     []
   );
 
   async function sana() {
     const orderIds = notifications.map((el: any) => el.order_id);
-    const orderList = orderIds.filter((v, i, a) => a.indexOf(v) === i);
+    const orderList = orderIds.filter(
+      (v: any, i: any, a: any) => a.indexOf(v) === i
+    );
     const Orders = await Promise.all(
       orderList.map(async (order: any) => await getBuyOrder(parseInt(order)))
     );
@@ -43,42 +51,109 @@ export default function NotificationComponent() {
 
       setFormatedNotifications(res);
     });
-    // sana().then((res: any) => console.log(res));
+    // sana().then((res: any) => console.log("sanaaa", res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notifications]);
 
+  const buyAssets = async (assets: any) => {
+    let totalPrice = 0;
+    Promise.all(
+      assets.map(async (asset: any) => {
+        const assetInfo = await getAsset(asset.company_id, asset.asset_id);
+
+        totalPrice += formatEther(parseInt(assetInfo.price));
+      })
+    ).then(() => {
+      console.log(totalPrice);
+    });
+
+    if (currentBalance < totalPrice) {
+      changeSnackBar(true, "Not Enough LDT Token", "error");
+      return;
+    }
+    if (await buyContractAsset(assets, currentBalance)) {
+      updateAccountBalance();
+      changeSnackBar(true, "Item Bough With Success", "success");
+    }
+  };
+
   return (
-    <div>
-      <Menu>
-        <MenuButton mx={10}>
-          <Avatar size="sm">
-            <AvatarBadge
-              borderColor="papayawhip"
-              bg="tomato"
-              boxSize="1.25em"
-            />
-          </Avatar>
-        </MenuButton>
-        <MenuList mr={-5}>
-          {Object.keys(formatedNotifications).map((key, index) => (
-            <>
-              <MenuItem
-                key={key}
-                display={"flex"}
-                flexDirection={"column"}
-                my={5}
-              >
-                {formatedNotifications[key].isBuyOrder
-                  ? "Buy Order"
-                  : "Sell Order"}{" "}
-                of {formatedNotifications[key].compSymbol} can be fullfield(
-                {formatedNotifications[key].assets.length} Items)
-                <Button>Execute Order</Button>
-              </MenuItem>
-            </>
-          ))}
-        </MenuList>
+    <React.Fragment>
+      <Box sx={{display: "flex", alignItems: "center", textAlign: "center"}}>
+        <Tooltip title="Account settings">
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            sx={{ml: 2}}
+            aria-controls={open ? "account-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+          >
+            <Badge badgeContent={formatedNotifications.length} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&:before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{horizontal: "right", vertical: "top"}}
+        anchorOrigin={{horizontal: "right", vertical: "bottom"}}
+      >
+        {formatedNotifications.map((order: any) => (
+          <MenuItem
+            key={order.order_id}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+            }}
+          >
+            <p>
+              {order.compSymbol} Buy Order of {order.assets.length} asset is
+              ready
+            </p>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={() => buyAssets(order.assets)}
+            >
+              Execute Order
+            </Button>
+          </MenuItem>
+        ))}
+        {formatedNotifications.length === 0 && <h5>No Notifications</h5>}
       </Menu>
-    </div>
+    </React.Fragment>
   );
 }

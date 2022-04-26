@@ -102,6 +102,7 @@ const EnhancedTableToolbar = (props: any) => {
       {numSelected > 0 && props.buy && (
         <Tooltip title="Delete">
           <Button
+            color="secondary"
             onClick={() => {
               props.buy ? props.buyAssets() : props.sellAssets();
             }}

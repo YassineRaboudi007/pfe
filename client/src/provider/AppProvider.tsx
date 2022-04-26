@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, {useState, useEffect, useCallback, useContext} from "react";
 import {
   checkIfWalletAccountIsConnected,
   connectWalletAccounts,
 } from "../smart-contract/WalletAccount";
-import { getContractAccountBalance } from "../smart-contract/ContractFunctions/TokenContractFunctions";
+import {getContractAccountBalance} from "../smart-contract/ContractFunctions/TokenContractFunctions";
 import formatEther from "../utils/formatEther";
 import useContractListner from "../hooks/useContractListner";
-import { getReadyBuyOrders } from "../smart-contract/ContractFunctions/OrderContractFunctions";
-import { getCompanyMarketAssets } from "../smart-contract/ContractFunctions/AssetContractFunctions";
+import {getReadyBuyOrders} from "../smart-contract/ContractFunctions/OrderContractFunctions";
 
 type LogoutType = "LogedOut" | "LogedIn" | null;
 type accountValue = string | null;
@@ -50,7 +49,7 @@ export const AppContext = React.createContext<IAppContext>({
   snackbar: null,
 });
 
-const AppProvider: React.FC = ({ children }) => {
+const AppProvider: React.FC = ({children}) => {
   const [notifications, setNotifications] = useState<any>([]);
   const [account, setAccount] = useState<accountValue>(null);
   const [logout, setLogout] = useState<LogoutType>(null);
@@ -65,6 +64,24 @@ const AppProvider: React.FC = ({ children }) => {
 
   const listnerNotifications = useContractListner();
 
+  useEffect(() => {
+    notifications.map((notif: any) => {
+      listnerNotifications.map((listnotif: any) => {
+        if (
+          notif.asset_id !== listnotif.asset_id &&
+          notif.company_id !== listnotif.company_id &&
+          notif.order_id !== listnotif.order_id
+        ) {
+          setNotifications((notifications: any) => [
+            ...notifications,
+            listnotif,
+          ]);
+        }
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listnerNotifications]);
+
   const changeSnackBar = (
     open: boolean,
     message: string,
@@ -77,7 +94,7 @@ const AppProvider: React.FC = ({ children }) => {
         severity,
       });
     } else {
-      setSnackBar({ ...snackbar, open: false });
+      setSnackBar({...snackbar, open: false});
     }
   };
 
@@ -85,10 +102,7 @@ const AppProvider: React.FC = ({ children }) => {
     setOpen(true);
   };
 
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
+  const handleClose = (reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
@@ -96,24 +110,8 @@ const AppProvider: React.FC = ({ children }) => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    notifications.map((notif: any) => {
-      listnerNotifications.map((listnotif: any) => {
-        if (
-          notif.asset_id !== listnotif.asset_id &&
-          notif.company_id !== listnotif.company_id &&
-          notif.order_id !== listnotif.order_id
-        ) {
-          setNotifications([...notifications, listnotif]);
-        }
-      });
-    });
-  }, [listnerNotifications, notifications]);
-
   const connectWallet = (): void => {
     connectWalletAccounts().then((acc) => {
-      console.log("accoutn ", acc);
-
       setAccount(acc);
       setLogout("LogedIn");
     });
@@ -125,17 +123,15 @@ const AppProvider: React.FC = ({ children }) => {
     setLogout("LogedOut");
   };
 
-  const updateAccountBalance = async () => {
+  const updateAccountBalance = useCallback(async () => {
     const balanceInWei: number = await getContractAccountBalance(account);
     setCurrentBalance(formatEther(balanceInWei));
-  };
+  }, [account]);
 
   const setAccVal = useCallback(async () => {
     if (logout !== "LogedOut") {
       const res = await checkIfWalletAccountIsConnected();
       if (res) {
-        console.log("accoutn ", res);
-
         setAccount(res);
         setLogout("LogedIn");
         if (account) {
@@ -145,20 +141,20 @@ const AppProvider: React.FC = ({ children }) => {
         setLogout("LogedOut");
       }
     }
-  }, [account, logout]);
+  }, [account, logout, updateAccountBalance]);
 
   const onLoad = useCallback(async () => {
     await setAccVal();
     if (account) await updateAccountBalance();
-  }, [setAccVal, account]);
+  }, [setAccVal, account, updateAccountBalance]);
 
-  // useEffect(() => {
-  //   onLoad();
-  // }, [onLoad]);
+  useEffect(() => {
+    onLoad();
+  }, [onLoad]);
 
-  // useEffect(() => {
-  //   getReadyBuyOrders().then((res: any) => setNotifications(res));
-  // }, []);
+  useEffect(() => {
+    getReadyBuyOrders().then((res: any) => setNotifications(res));
+  }, []);
 
   const appContext: IAppContext = {
     account,

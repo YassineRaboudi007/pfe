@@ -45,8 +45,7 @@ const useContractListner = () => {
 
         const res = await ContractBuyOrderItems(
           concernedOrder.company_id,
-          concernedOrder.price,
-          owner
+          concernedOrder.price
         );
 
         if (res.length - 1 >= parseInt(concernedOrder.quantity._hex, 16)) {
@@ -81,11 +80,7 @@ const useContractListner = () => {
         const currentOrder = await getCurrentCompanyBuyOrder(company_id);
 
         if (parseInt(currentOrder.id) === parseInt(id)) {
-          const res = await ContractBuyOrderItems(
-            company_id,
-            price,
-            currentOrder.buyer
-          );
+          const res = await ContractBuyOrderItems(company_id, price);
           if (res.length >= parseInt(quantity)) {
             const formatedArray = res
               .slice(0, parseInt(quantity))

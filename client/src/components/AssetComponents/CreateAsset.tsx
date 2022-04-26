@@ -1,14 +1,7 @@
 import {useState, useEffect} from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import {
-  Badge,
-  Button,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  Typography,
-} from "@mui/material";
+import {Button, FormControl, TextField, Typography} from "@mui/material";
 import useForm from "../../hooks/useForm";
 import {useAppContext} from "../../provider/AppProvider";
 import {getCompanyById} from "../../api/CompanyService";
@@ -82,44 +75,48 @@ export default function SimplePaper() {
     >
       <Paper
         elevation={3}
-        sx={{width: "100%", margin: "auto", padding: "20px"}}
+        sx={{width: "100%", marginTop: "10%", padding: "20px"}}
       >
         <Box sx={{width: "90%", margin: "auto"}}>
           <Typography variant="h4" align="center" sx={{margin: "50px"}}>
             Create Asset
           </Typography>
-          <Typography variant="h6" sx={{m: 1}}>
+          <Typography variant="subtitle1" sx={{m: 1}}>
             Company :
           </Typography>
           <FormControl fullWidth margin="normal">
-            <OutlinedInput
+            <TextField
               label={company.symbol}
               disabled
               value={company.symbol}
+              color="secondary"
+              variant="outlined"
             />
           </FormControl>
-          <Typography variant="h6" sx={{m: 1}}>
+          <Typography variant="subtitle1" sx={{m: 1}}>
             Amount :
           </Typography>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-            <OutlinedInput
+            <TextField
               id="outlined-adornment-amount"
               label="Amount"
               name="amount"
               onChange={setValues}
+              color="secondary"
+              variant="outlined"
             />
           </FormControl>
-          <Typography variant="h6" sx={{m: 1}}>
+          <Typography variant="subtitle1" sx={{m: 1}}>
             Price :
           </Typography>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
-            <OutlinedInput
+            <TextField
               id="outlined-adornment-amount"
               label="Price"
               name="price"
               onChange={setValues}
+              color="secondary"
+              variant="outlined"
             />
           </FormControl>
           <Box

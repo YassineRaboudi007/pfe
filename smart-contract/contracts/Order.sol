@@ -16,6 +16,7 @@ contract OrderContract {
         uint timestamp;  
         address seller;
         address buyer;
+        bool isFullfield;
         bool isActive;
     }
 
@@ -34,18 +35,7 @@ contract OrderContract {
         uint timestamp, 
         address seller,
         address buyer,
-        bool isActive
-
-    );
-
-    event SellOrder(
-        uint id,
-        string company_id,
-        uint price,
-        uint quantity,
-        uint timestamp, 
-        address seller,
-        address buyer,
+        bool isFullfield,
         bool isActive
     );
 
@@ -64,6 +54,7 @@ contract OrderContract {
             block.timestamp,
             address(0),
             msg.sender,
+            false,
             true
         ));
         buyId++;
@@ -75,6 +66,7 @@ contract OrderContract {
             block.timestamp,
             address(0),
             msg.sender,
+            false,
             true
         );
     }
@@ -101,7 +93,7 @@ contract OrderContract {
         
         Order[] memory _marketBuyOrders = new Order[](counter);
         for (uint i=0;i<buyId;i++){
-            if(BuyOrders[i].buyer != tx.origin){
+            if(BuyOrders[i].buyer != tx.origin && BuyOrders[i].isActive && !BuyOrders[i].isFullfield){
                 _marketBuyOrders[cpt] = BuyOrders[i];        
                 cpt++;
             }

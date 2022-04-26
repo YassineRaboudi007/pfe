@@ -51,8 +51,6 @@ export const formatOrder = (orders: any, companys: any) => {
 };
 
 export const formatNotif = async (notifications: any) => {
-  console.log("notifications ,", notifications);
-
   const orderIds = notifications.map((el: any) => el.order_id);
   const orderList = orderIds.filter(
     (v: any, i: any, a: any) => a.indexOf(v) === i
@@ -79,5 +77,21 @@ export const formatNotif = async (notifications: any) => {
       },
     };
   }, {});
-  return groups;
+
+  const finalRes = Object.keys(groups).map((key: any) => {
+    const formatedAssets = groups[key].assets.map((asset: any) => {
+      return {
+        asset_id: parseInt(asset.asset_id),
+        company_id: asset.company_id,
+      };
+    });
+    return {
+      compSymbol: groups[key].compSymbol,
+      isBuyOrder: groups[key].isBuyOrder,
+      assets: formatedAssets,
+      order_id: key,
+    };
+  });
+
+  return finalRes;
 };

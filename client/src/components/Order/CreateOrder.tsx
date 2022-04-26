@@ -8,6 +8,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import {AppContext} from "../../provider/AppProvider";
@@ -15,6 +16,7 @@ import useCustomToast from "../../hooks/useCustomToast";
 import {createContractBuyOrder} from "../../smart-contract/ContractFunctions/OrderContractFunctions";
 import {getAllCompanys} from "../../api/CompanyService";
 import useForm from "../../hooks/useForm";
+import NotificationComponent from "../NotificationComponent";
 
 export default function SimplePaper() {
   const [amount, setAmount] = useState<number>(0.5);
@@ -82,7 +84,9 @@ export default function SimplePaper() {
             Company :
           </Typography>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Company</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-amount" color="secondary">
+              Company
+            </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -90,10 +94,13 @@ export default function SimplePaper() {
               value={values.company ? values.company : 0}
               label="Age"
               onChange={onChange}
+              color="secondary"
             >
               <MenuItem value={0}>Select a Company</MenuItem>
-              {companys.map((comp: any) => (
-                <MenuItem value={comp._id}>{comp.symbol}</MenuItem>
+              {companys.map((comp: any, index: number) => (
+                <MenuItem key={comp._id} value={comp._id}>
+                  {comp.symbol}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -101,24 +108,26 @@ export default function SimplePaper() {
             Amount :
           </Typography>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-            <OutlinedInput
+            <TextField
               id="outlined-adornment-amount"
               label="Amount"
-              value={amount}
+              name="amount"
               onChange={onChange}
+              color="secondary"
+              variant="outlined"
             />
           </FormControl>
           <Typography variant="h6" sx={{m: 1}}>
             Max asset buy price :
           </Typography>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
-            <OutlinedInput
+            <TextField
               id="outlined-adornment-amount"
               label="Price"
-              value={amount}
+              name="price"
               onChange={onChange}
+              color="secondary"
+              variant="outlined"
             />
           </FormControl>
           <Box

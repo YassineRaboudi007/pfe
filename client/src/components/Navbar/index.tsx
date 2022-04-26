@@ -37,44 +37,54 @@ import AccountMenu from "./MenuDropDown";
 import AddIcon from "@mui/icons-material/Add";
 import BusinessIcon from "@mui/icons-material/Business";
 import StorefrontIcon from "@mui/icons-material/Storefront";
+import {getRoleFromJWT} from "../../utils/decodeJWT";
+import NotificationComponent from "../NotificationComponent";
 
-const pages = [
-  {
+const pages = (role: string) => {
+  const AssetListItems = {
     name: "Assets",
     listItems: [
-      {
-        name: "Add Asset",
-        url: ADD_ASSETS_URL,
-        icon: <AddIcon />,
-      },
       {
         name: "Company Assets",
         url: COMPANY_ASSETS,
         icon: <BusinessIcon />,
       },
-      {
-        name: "Market Assets",
-        url: GET_ASSETS_URL,
-        icon: <StorefrontIcon />,
-      },
     ],
-  },
-  {
-    name: "Orders",
-    listItems: [
-      {
-        name: "Create Order",
-        url: CREATE_ORDER,
-        icon: <AddIcon />,
-      },
-      {
-        name: "Market Orders",
-        url: MARKET_ORDERS,
-        icon: <StorefrontIcon />,
-      },
-    ],
-  },
-];
+  };
+  const finalRes = [AssetListItems];
+  if (role === "user") {
+    const OrderListItems = {
+      name: "Orders",
+      listItems: [
+        {
+          name: "Create Order",
+          url: CREATE_ORDER,
+          icon: <AddIcon />,
+        },
+        {
+          name: "Market Orders",
+          url: MARKET_ORDERS,
+          icon: <StorefrontIcon />,
+        },
+      ],
+    };
+    AssetListItems.listItems.push({
+      name: "Market Assets",
+      url: GET_ASSETS_URL,
+      icon: <StorefrontIcon />,
+    });
+    finalRes.push(OrderListItems);
+  }
+
+  if (role === "company")
+    AssetListItems.listItems.unshift({
+      name: "Add Asset",
+      url: ADD_ASSETS_URL,
+      icon: <AddIcon />,
+    });
+
+  return finalRes;
+};
 
 export default function PrimarySearchAppBar() {
   const {jwt, account, currentBalance, disconnect} = useAppContext();
@@ -155,16 +165,18 @@ export default function PrimarySearchAppBar() {
                 display: {xs: "block", md: "none"},
               }}
             >
-              {pages.map((page, key) => (
-                <CustomMenuList key={key} page={page} />
-              ))}
+              {jwt &&
+                pages(getRoleFromJWT(jwt)).map((page, key) => (
+                  <CustomMenuList key={key} page={page} />
+                ))}
             </Menu>
           </Box>
 
           <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
-            {pages.map((page, key) => (
-              <CustomMenuList key={key} page={page} />
-            ))}
+            {jwt &&
+              pages(getRoleFromJWT(jwt)).map((page, key) => (
+                <CustomMenuList key={key} page={page} />
+              ))}
           </Box>
 
           <Box sx={{display: {xs: "none", md: "flex", alignItems: "center"}}}>
@@ -183,31 +195,12 @@ export default function PrimarySearchAppBar() {
               ""
             )}
 
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <NotificationComponent />
+
             <AccountMenu
               userConnected={jwt ? true : false}
               currentBalance={currentBalance}
             />
-            {/* <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              
-               <AccountCircle /> 
-            </IconButton> */}
           </Box>
           <Box sx={{display: {xs: "flex", md: "none"}}}>
             <Tooltip title="Swap Tokens">
@@ -225,17 +218,7 @@ export default function PrimarySearchAppBar() {
               userConnected={jwt ? true : false}
               currentBalance={currentBalance}
             />
-
-            {/* <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton> */}
+            <NotificationComponent />
           </Box>
         </Toolbar>
       </AppBar>

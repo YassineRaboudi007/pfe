@@ -306,8 +306,6 @@ export function OrderContainer(props: any) {
               />
               <TableBody>
                 {props.data.map((item: any, index: number) => {
-                  console.log("item ", item);
-
                   const isItemSelected = isSelected(
                     parseInt(item.id).toString()
                   );
@@ -328,11 +326,11 @@ export function OrderContainer(props: any) {
                       <TableCell>
                         {item.isActive ? (
                           <Alert icon={false} severity="warning">
-                            Pending
+                            Active
                           </Alert>
                         ) : (
-                          <Alert icon={false} severity="success">
-                            Fullfield
+                          <Alert icon={false} severity="error">
+                            Cancelld
                           </Alert>
                         )}
                       </TableCell>

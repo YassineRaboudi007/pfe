@@ -34,6 +34,7 @@ import Transaction from "./components/Transaction/index";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {grey, cyan, red} from "@mui/material/colors";
 import {Box} from "@mui/system";
+import NotificationComponent from "./components/NotificationComponent";
 const outerTheme = createTheme({
   palette: {
     primary: {
