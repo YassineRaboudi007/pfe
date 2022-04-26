@@ -368,7 +368,21 @@ export function OrderContainer(props: any) {
                     </TableRow>
                   );
                 })}
-
+                {props.data.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                      <h3
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        Empty For The Moment
+                      </h3>
+                    </TableCell>
+                  </TableRow>
+                )}
                 {emptyRows > 0 && (
                   <TableRow
                     style={{

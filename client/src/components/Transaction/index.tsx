@@ -15,7 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import {Container} from "@mui/material";
+import {Alert, Container} from "@mui/material";
 
 import {getAllCompanys} from "../../api/CompanyService";
 import formatEther from "../../utils/formatEther";
@@ -146,13 +146,33 @@ export default function Transaction(props) {
                       <TableCell align="right">
                         {formatEther(row.prix)} LDT
                       </TableCell>
-                      <TableCell align="right">
-                        {row.position ? "Buyer" : "Seller"}
+                      <TableCell>
+                        <Alert
+                          icon={false}
+                          severity={row.position ? "success" : "error"}
+                        >
+                          {row.position ? "Buyer" : "Seller"}
+                        </Alert>
                       </TableCell>
                       <TableCell align="right">{row.date}</TableCell>
                     </TableRow>
                   );
                 })}
+                {transactions?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                      <h3
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        Empty For The Moment
+                      </h3>
+                    </TableCell>
+                  </TableRow>
+                )}
                 {emptyRows > 0 && (
                   <TableRow
                     style={{
