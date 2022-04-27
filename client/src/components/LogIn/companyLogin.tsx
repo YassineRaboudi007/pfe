@@ -11,7 +11,7 @@ import {createTheme, ThemeProvider} from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
 import {useContext} from "react";
 import {AppContext, useAppContext} from "../../provider/AppProvider";
-import {COMPANY_SIGNUP_URL} from "../../utils/NavUrls";
+import {COMPANY_SIGNUP_URL, COMPANY_FORGOT_PASSWORD} from "../../utils/NavUrls";
 import {getCompany} from "../../api/CompanyService";
 //@ts-ignore
 const {ethereum} = window;
@@ -139,6 +139,17 @@ export default function SignInSide() {
                   sx={{color: "black"}}
                 >
                   {"Dont have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+            <Grid container style={{margin: "10px 0"}}>
+              <Grid item>
+                <Link
+                  href={COMPANY_FORGOT_PASSWORD}
+                  variant="body2"
+                  sx={{color: "black"}}
+                >
+                  {"Forgot Password ?"}
                 </Link>
               </Grid>
             </Grid>

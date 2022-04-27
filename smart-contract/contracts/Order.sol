@@ -2,12 +2,15 @@
 pragma solidity ^0.8.0;
 
 import "./Asset.sol";
+import "./TransactionHistory.sol";
 
 contract OrderContract {
     uint buyId;
     uint sellId;
+
     AssetContract public _assetContract;
-    
+    TransactionContract public _transactionContract;
+
     struct Order{
         uint id;
         string company_id;
@@ -39,10 +42,16 @@ contract OrderContract {
         bool isActive
     );
 
+    struct BuyParamsStruct{
+        string company_id;
+        uint asset_id;
+    }
+
     Order[] BuyOrders;
 
-    constructor(address _AssetContract){
+    constructor(address _AssetContract,address _TransactionContract){
         _assetContract = AssetContract(_AssetContract);
+        _transactionContract = TransactionContract(_TransactionContract);
     }
     
     function createBuyOrder(string memory company_id,uint price,uint quantity) public {
@@ -148,7 +157,7 @@ contract OrderContract {
         Order[] memory allBuyOrders = getAllBuyOrders();
         for (uint i=0;i<allBuyOrders.length;i++){
             AssetContract.OrderAssetInfo[] memory assetsPerBuyOrder = _assetContract.getBuyOrderItems(allBuyOrders[i].company_id,allBuyOrders[i].price);
-            if (assetsPerBuyOrder.length >= allBuyOrders[i].quantity){
+            if (assetsPerBuyOrder.length >= allBuyOrders[i].quantity && allBuyOrders[i].isActive){
                 for (uint j=0;j<allBuyOrders[i].quantity;j++){
                    cpt++;
                 }
@@ -158,7 +167,7 @@ contract OrderContract {
         OrderAssets[] memory ordersReady =  new OrderAssets[](cpt);
         for (uint i=0;i<allBuyOrders.length;i++){
             AssetContract.OrderAssetInfo[] memory assetsPerBuyOrder = _assetContract.getBuyOrderItems(allBuyOrders[i].company_id,allBuyOrders[i].price);
-            if (assetsPerBuyOrder.length >= allBuyOrders[i].quantity){
+            if (assetsPerBuyOrder.length >= allBuyOrders[i].quantity && allBuyOrders[i].isActive){
                 for (uint j=0;j<allBuyOrders[i].quantity;j++){
                     ordersReady[counter] = OrderAssets(
                         allBuyOrders[i].id,
@@ -205,5 +214,17 @@ contract OrderContract {
         _order.price = price;
         _order.quantity = quantity;
         _order.timestamp = block.timestamp;
+    }
+
+    function executeOrder(TransactionContract.BuyParamsStruct[] memory params,uint orderId)public {
+        _transactionContract.buyAsset(params);
+        Order storage _order = BuyOrders[0];
+        for (uint i=0;i<buyId;i++){
+            if (BuyOrders[i].id == orderId){
+                _order =  BuyOrders[i];
+            }
+        }
+        _order.isFullfield = true;
+        _order.isActive = false;
     }
 }

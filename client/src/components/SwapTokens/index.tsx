@@ -105,6 +105,7 @@ export default function SimplePaper() {
                 label="Amount"
                 onChange={changedAmount}
                 disabled={isBuying ? false : true}
+                color="secondary"
               />
             </FormControl>
             <Typography variant="h5" sx={{m: 1}}>
@@ -120,6 +121,7 @@ export default function SimplePaper() {
                 value={amount}
                 onChange={changedAmount}
                 disabled={isBuying ? true : false}
+                color="secondary"
               />
             </FormControl>
             <Box

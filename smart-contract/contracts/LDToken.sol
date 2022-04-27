@@ -5,14 +5,15 @@ import "./library/SafeMath.sol";
 import "./interfaces/IERC20.sol";
 import "./ReentrancyGuard.sol";
 import "./Ownable.sol";
-
+import "./OpeartionsHistory.sol";
 
 contract LDToken is IERC20,Ownable,ReentrancyGuard {
     using SafeMath for uint;
     uint x;
     uint _totalSupply;
     address public TransactionContract;
-    
+    OperationHistoryContract _operationContract;
+
     struct Transaction{
         address from;
         address to;
@@ -24,6 +25,10 @@ contract LDToken is IERC20,Ownable,ReentrancyGuard {
 
     mapping(address => uint) public balances;
     mapping (address => mapping (address => uint)) public allowed;
+
+    constructor(address _operataionsContract){
+        _operationContract = OperationHistoryContract(_operataionsContract);
+    }
 
     function setTransactionContract(address _transactionContract) public onlyOwner{
         TransactionContract = _transactionContract;
@@ -42,6 +47,7 @@ contract LDToken is IERC20,Ownable,ReentrancyGuard {
         require(balances[msg.sender] >= _value,"Insuffiecent Funds");
         balances[msg.sender] = balances[msg.sender].sub(_value);
         balances[_to] = balances[_to].add(_value);
+        _operationContract.addOperation(msg.sender,_to,_value);
         emit Transfer(msg.sender, _to, _value);
         return true;
     } 
@@ -72,6 +78,7 @@ contract LDToken is IERC20,Ownable,ReentrancyGuard {
         balances[from] = balances[from].sub(amount);
         balances[to] = balances[to].add(amount);
         if (msg.sender != TransactionContract) {allowed[from][msg.sender] = _allowance.sub(amount);} 
+        _operationContract.addOperation(from,to,amount);
         emit Transfer(from,to,amount);
         return true;
     }
@@ -111,11 +118,13 @@ contract LDToken is IERC20,Ownable,ReentrancyGuard {
         require(msg.value == _amount,"Its is good");
         approve(TransactionContract, _amount);
         _mint(msg.sender,_amount);
+        _operationContract.addOperation(msg.sender,address(0),_amount);
     }
 
     function sellTokens(uint _amount) public payable nonReentrant{
         require (balances[msg.sender] >= _amount,"Its is good");
         _burn(msg.sender,_amount);
-        payable(msg.sender).transfer(_amount);    
+        payable(msg.sender).transfer(_amount);
+        _operationContract.addOperation(address(0),msg.sender,_amount);
     }
 }

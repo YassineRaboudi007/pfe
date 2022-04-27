@@ -17,6 +17,7 @@ import {
   TRANSACTION,
   USER_ASSETS,
   USER_ORDERS,
+  OPERATIONS,
 } from "../../utils/NavUrls";
 import {useAppContext} from "../../provider/AppProvider";
 import {accountAddressSlice} from "../../utils/helperFunctions";
@@ -24,8 +25,6 @@ import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import WebAssetIcon from "@mui/icons-material/WebAsset";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import LoginIcon from "@mui/icons-material/Login";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
 import {Divider, Typography} from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -159,6 +158,7 @@ export default function AccountMenu(props: any) {
               </ListItemIcon>
               Address : {accountAddressSlice(account)}
             </MenuItem>
+            <Divider />
             <Link
               to={USER_ASSETS}
               style={{textDecoration: "none", color: "inherit"}}
@@ -181,6 +181,7 @@ export default function AccountMenu(props: any) {
                 My Orders
               </MenuItem>
             </Link>
+            <Divider />
 
             <Link
               to={TRANSACTION}
@@ -190,9 +191,23 @@ export default function AccountMenu(props: any) {
                 <ListItemIcon>
                   <ManageSearchIcon fontSize="small" />
                 </ListItemIcon>
-                Transaction History
+                Transactions History
               </MenuItem>
             </Link>
+
+            <Link
+              to={OPERATIONS}
+              style={{textDecoration: "none", color: "inherit"}}
+            >
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <ManageSearchIcon fontSize="small" />
+                </ListItemIcon>
+                Operations History
+              </MenuItem>
+            </Link>
+
+            <Divider />
 
             <MenuItem>
               <ListItemIcon>

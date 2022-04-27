@@ -34,13 +34,13 @@ contract TransactionContract {
         for (uint i=0;i<_buyParams.length;i++){
             uint _price = assetContract.getAsset(_buyParams[i].company_id, _buyParams[i].asset_id).price;
             address owner = assetContract.getAsset(_buyParams[i].company_id, _buyParams[i].asset_id).owner;
-            ldtContract.transferFrom(msg.sender,owner, _price);
-            assetContract.changeAssetOwner(_buyParams[i].company_id, _buyParams[i].asset_id, msg.sender);
+            ldtContract.transferFrom(tx.origin,owner, _price);
+            assetContract.changeAssetOwner(_buyParams[i].company_id, _buyParams[i].asset_id, tx.origin);
             assetContract.unlistAsset(_buyParams[i].company_id, _buyParams[i].asset_id);
             Transaction memory buyerTransaction = Transaction(
                 _buyParams[i].asset_id,
                 _buyParams[i].company_id,
-                msg.sender,
+                tx.origin,
                 _price,
                 block.timestamp,
                 true
@@ -56,7 +56,7 @@ contract TransactionContract {
             );
 
             AssetTransactionHistory[_buyParams[i].asset_id].push(buyerTransaction);
-            UserTransactionHistory[msg.sender].push(buyerTransaction);
+            UserTransactionHistory[tx.origin].push(buyerTransaction);
             UserTransactionHistory[owner].push(sellerTransaction);
         }
     }

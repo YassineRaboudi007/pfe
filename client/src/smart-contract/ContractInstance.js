@@ -8,6 +8,8 @@ import {
   TransactionContractAddress,
   OrderContractABI,
   OrderContractAddress,
+  OperationsContractABI,
+  OperationsContractAddress,
 } from "./constantes";
 
 export const getLdtContract = () => {
@@ -64,6 +66,20 @@ export const getOrderContract = () => {
   const OrderContract = new ethers.Contract(
     OrderContractAddress,
     OrderContractABI,
+    signer
+  );
+  return OrderContract;
+};
+
+export const getOpreationContract = () => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // const provider = new ethers.providers.JsonRpcProvider(
+  //   "HTTP://127.0.0.1:7545"
+  // );
+  const signer = provider.getSigner();
+  const OrderContract = new ethers.Contract(
+    OperationsContractAddress,
+    OperationsContractABI,
     signer
   );
   return OrderContract;

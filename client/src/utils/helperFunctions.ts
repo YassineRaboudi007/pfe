@@ -45,6 +45,7 @@ export const formatOrder = (orders: any, companys: any) => {
       company_id: order.company_id,
       created_at: new Date(order.timestamp * 1000).toLocaleString(),
       isActive: order.isActive,
+      isFullfield: order.isFullfield,
     };
   });
   return res;

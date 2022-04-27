@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
+import "./LDToken.sol";
 contract AssetContract {
     uint id;
+    LDToken ldtContract;
 
     struct CompanyAssetInfo{
         string company_id;
@@ -24,6 +26,11 @@ contract AssetContract {
         uint asset_id;
     }
 
+    struct BuyParamsStruct{
+        string company_id;
+        uint asset_id;
+    }
+
     event AssetStateChanged(
         uint id,
         uint price,
@@ -33,7 +40,8 @@ contract AssetContract {
     );
 
     mapping (string => Asset[]) public AssetListByCompany;
-    
+
+
     function createAsset(
         uint price,
         uint _amount,

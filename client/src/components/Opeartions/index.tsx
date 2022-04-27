@@ -36,11 +36,11 @@ function EnhancedTableHead(props: any) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>Company Id</TableCell>
-        <TableCell align="right">Quantity</TableCell>
-        <TableCell align="right">Price</TableCell>
-        <TableCell align="right">Position</TableCell>
-        <TableCell align="right">Date</TableCell>
+        <TableCell>From </TableCell>
+        <TableCell>To</TableCell>
+        <TableCell>Quantity</TableCell>
+        <TableCell>Position</TableCell>
+        <TableCell>Date</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -86,37 +86,21 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           Data
         </Typography>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
     </Toolbar>
   );
 };
 
-export default function Transaction(props) {
+export default function Operations(props) {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [transactions, setTransactions] = React.useState<any[]>();
-  const [companys, setCompanys] = React.useState([]);
-
+  const [operations, setOperations] = React.useState([]);
   React.useEffect(() => {
-    getUserTransactions().then((res) => {
-      setTransactions(res[0]);
+    getUserOperations().then((res) => {
+      console.log("sana is here ", res);
+      setOperations(res);
     });
-    getAllCompanys().then((res) => setCompanys(res));
-    getUserOperations().then((res) => console.log("all lol ", res));
   }, []);
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -132,35 +116,41 @@ export default function Transaction(props) {
             <Table sx={{minWidth: 750}} aria-labelledby="tableTitle">
               <EnhancedTableHead />
               <TableBody>
-                {transactions?.map((row: any, index: any) => {
+                {operations?.map((row: any, index: any) => {
                   console.log("row ", row);
 
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                       <TableCell>
-                        {
-                          companys.filter(
-                            (el: any) => el._id === row.company_id
-                          )[0].symbol
-                        }
+                        {row.from ===
+                        "0x0000000000000000000000000000000000000000"
+                          ? "Linedata MarketPlace"
+                          : row.from}
                       </TableCell>
-                      <TableCell align="right">{row.quantity}</TableCell>
+                      <TableCell>
+                        {row.to === "0x0000000000000000000000000000000000000000"
+                          ? "Linedata MarketPlace"
+                          : row.to}
+                      </TableCell>
                       <TableCell align="right">
-                        {formatEther(row.prix)} LDT
+                        {formatEther(row.quantity)} LDT
                       </TableCell>
+
                       <TableCell>
                         <Alert
                           icon={false}
-                          severity={row.position ? "success" : "error"}
+                          severity={row.isBuyer ? "success" : "error"}
                         >
-                          {row.position ? "Buyer" : "Seller"}
+                          {row.isBuyer ? "Buyer" : "Seller"}
                         </Alert>
                       </TableCell>
-                      <TableCell align="right">{row.date}</TableCell>
+                      <TableCell align="right">
+                        {new Date(row.timestamp * 1000).toLocaleString()}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
-                {transactions?.length === 0 && (
+                {operations?.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={5}>
                       <h3

@@ -309,6 +309,7 @@ export function OrderContainer(props: any) {
                   const isItemSelected = isSelected(
                     parseInt(item.id).toString()
                   );
+                  console.log("item ", item);
 
                   return (
                     <TableRow
@@ -324,20 +325,26 @@ export function OrderContainer(props: any) {
                       <TableCell>{item.price}</TableCell>
                       <TableCell>{item.issuer}</TableCell>
                       <TableCell>
-                        {item.isActive ? (
-                          <Alert icon={false} severity="warning">
-                            Active
-                          </Alert>
-                        ) : (
+                        {!item.isActive && !item.isFullfield && (
                           <Alert icon={false} severity="error">
-                            Cancelld
+                            Cancelled
+                          </Alert>
+                        )}
+                        {item.isActive && !item.isFullfield && (
+                          <Alert icon={false} severity="warning">
+                            Pending
+                          </Alert>
+                        )}
+                        {item.isFullfield && (
+                          <Alert icon={false} severity="success">
+                            Fullfield
                           </Alert>
                         )}
                       </TableCell>
                       <TableCell>{item.created_at}</TableCell>
                       {props.cancel && (
                         <TableCell>
-                          {item.isActive ? (
+                          {item.isActive && !item.isFullfield && (
                             <Button
                               onClick={() => cancelOrder(parseInt(item.id))}
                               color="secondary"
@@ -345,7 +352,8 @@ export function OrderContainer(props: any) {
                             >
                               Cancel Order
                             </Button>
-                          ) : (
+                          )}
+                          {!item.isActive && !item.isFullfield && (
                             <Button
                               color="secondary"
                               variant="outlined"
@@ -354,15 +362,17 @@ export function OrderContainer(props: any) {
                               Activate Order
                             </Button>
                           )}
-                          <Tooltip title="Edit" sx={{margin: "0 15px"}}>
-                            <IconButton
-                              aria-label="Edit"
-                              onClick={() => EditOrder(item)}
-                              color="secondary"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
+                          {item.isActive && (
+                            <Tooltip title="Edit" sx={{margin: "0 15px"}}>
+                              <IconButton
+                                aria-label="Edit"
+                                onClick={() => EditOrder(item)}
+                                color="secondary"
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Tooltip>
+                          )}
                         </TableCell>
                       )}
                     </TableRow>

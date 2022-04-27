@@ -18,9 +18,17 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
+  // Weget the operation contract
+  const OPERATIONSCONTRACT = await hre.ethers.getContractFactory(
+    "OperationHistoryContract"
+  );
+  const OperationHistoryContract = await OPERATIONSCONTRACT.deploy();
+
+  await OperationHistoryContract.deployed();
+
   // We get the contract to deploy
   const LDTOKEN = await hre.ethers.getContractFactory("LDToken");
-  const LDToken = await LDTOKEN.deploy();
+  const LDToken = await LDTOKEN.deploy(OperationHistoryContract.address);
 
   await LDToken.deployed();
 
@@ -43,13 +51,20 @@ async function main() {
   await LDToken.setTransactionContract(TransactionContract.address);
 
   const ORDERCONTRACT = await hre.ethers.getContractFactory("OrderContract");
-  const OrderContract = await ORDERCONTRACT.deploy(AssetContract.address);
+  const OrderContract = await ORDERCONTRACT.deploy(
+    AssetContract.address,
+    TransactionContract.address
+  );
 
   await OrderContract.deployed();
   console.log("Token Contract deployed to:", LDToken.address);
   console.log("Asset Contract deployed to:", AssetContract.address);
   console.log("Transaction Contract deployed to:", TransactionContract.address);
   console.log("Order Contract deployed to:", OrderContract.address);
+  console.log(
+    "OperationHistoryContractw Contract deployed to:",
+    OperationHistoryContract.address
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere

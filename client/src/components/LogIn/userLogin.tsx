@@ -15,7 +15,7 @@ import {createTheme, ThemeProvider} from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
 import {AppContext} from "../../provider/AppProvider";
 import {addUser, getUser} from "../../api/UserService";
-import {USER_LOGIN_URL, USER_SIGNUP_URL} from "../../utils/NavUrls";
+import {USER_SIGNUP_URL, USER_FORGOT_PASSWORD} from "../../utils/NavUrls";
 
 //@ts-ignore
 
@@ -120,6 +120,17 @@ export default function SignInSide() {
                   sx={{color: "black"}}
                 >
                   {"Dont have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+            <Grid container style={{margin: "10px 0"}}>
+              <Grid item>
+                <Link
+                  href={USER_FORGOT_PASSWORD}
+                  variant="body2"
+                  sx={{color: "black"}}
+                >
+                  {"Forgot Password ?"}
                 </Link>
               </Grid>
             </Grid>

@@ -85,3 +85,19 @@ export const modifyBuyOrder = async (
   );
   return await tx.wait();
 };
+
+export const executeOrderContract = async (
+  buyParams: any[],
+  currentBalance: number,
+  totalPrice: number,
+  orderId: any
+) => {
+  const OrderContract = getOrderContract();
+
+  if (totalPrice > currentBalance) {
+    return false;
+  }
+
+  const tx = await OrderContract.executeOrder(buyParams, orderId);
+  return await tx.wait();
+};

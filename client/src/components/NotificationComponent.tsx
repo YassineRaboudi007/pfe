@@ -5,13 +5,15 @@ import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import {useAppContext} from "../provider/AppProvider";
-import {getBuyOrder} from "../smart-contract/ContractFunctions/OrderContractFunctions";
+import {
+  executeOrderContract,
+  getBuyOrder,
+} from "../smart-contract/ContractFunctions/OrderContractFunctions";
 import {getAllCompanys} from "../api/CompanyService";
 import {formatNotif} from "../utils/helperFunctions";
 import {Badge, Button} from "@mui/material";
 import {getAsset} from "../smart-contract/ContractFunctions/AssetContractFunctions";
 import formatEther from "../utils/formatEther";
-import {buyContractAsset} from "../smart-contract/ContractFunctions/TransactionContractFunctions";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 export default function AccountMenu() {
@@ -47,34 +49,54 @@ export default function AccountMenu() {
 
   React.useEffect(() => {
     formatNotif(notifications).then((res: any) => {
-      console.log("res ", res);
-
-      setFormatedNotifications(res);
+      let totalPrice = 0;
+      res.map((order: any) => {
+        console.log("order  ", order.assets);
+        Promise.all(
+          order.assets.map(async (asset: any) => {
+            const assetInfo = await getAsset(asset.company_id, asset.asset_id);
+            totalPrice += formatEther(parseFloat(assetInfo.price));
+          })
+        ).then(async () => {
+          console.log(totalPrice);
+          if (currentBalance < totalPrice) {
+            setFormatedNotifications([
+              ...formatedNotifications,
+              {...order, totalPrice},
+            ]);
+            return;
+          }
+        });
+      });
     });
+
     // sana().then((res: any) => console.log("sanaaa", res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notifications]);
 
-  const buyAssets = async (assets: any) => {
+  const buyAssets = async (order: any) => {
+    const {assets, order_id} = order;
+    console.log("order ", order);
+
     let totalPrice = 0;
     Promise.all(
       assets.map(async (asset: any) => {
         const assetInfo = await getAsset(asset.company_id, asset.asset_id);
-
-        totalPrice += formatEther(parseInt(assetInfo.price));
+        totalPrice += formatEther(parseFloat(assetInfo.price));
       })
-    ).then(() => {
+    ).then(async () => {
       console.log(totalPrice);
+      if (currentBalance < totalPrice) {
+        changeSnackBar(true, "Not Enough LDT Token", "error");
+        return;
+      }
+      if (
+        await executeOrderContract(assets, currentBalance, totalPrice, order_id)
+      ) {
+        updateAccountBalance();
+        changeSnackBar(true, "Item Bough With Success", "success");
+      }
     });
-
-    if (currentBalance < totalPrice) {
-      changeSnackBar(true, "Not Enough LDT Token", "error");
-      return;
-    }
-    if (await buyContractAsset(assets, currentBalance)) {
-      updateAccountBalance();
-      changeSnackBar(true, "Item Bough With Success", "success");
-    }
   };
 
   return (
@@ -143,10 +165,11 @@ export default function AccountMenu() {
               {order.compSymbol} Buy Order of {order.assets.length} asset is
               ready
             </p>
+            <p>Total Price : {order.totalPrice}</p>
             <Button
               color="secondary"
               variant="outlined"
-              onClick={() => buyAssets(order.assets)}
+              onClick={() => buyAssets(order)}
             >
               Execute Order
             </Button>

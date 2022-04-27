@@ -28,6 +28,7 @@ import {
   USER_ORDERS,
   USER_ASSETS,
   TRANSACTION,
+  OPERATIONS,
 } from "./utils/NavUrls";
 import CustomizedSnackbars from "./components/Snackbar";
 import Transaction from "./components/Transaction/index";
@@ -35,6 +36,7 @@ import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {grey, cyan, red} from "@mui/material/colors";
 import {Box} from "@mui/system";
 import NotificationComponent from "./components/NotificationComponent";
+import Operations from "./components/Opeartions";
 const outerTheme = createTheme({
   palette: {
     primary: {
@@ -83,6 +85,7 @@ function App() {
               <Route path={MARKET_ORDERS} element={<OrderList />} />
               <Route path={USER_ORDERS} element={<OrderList />} />
               <Route path={TRANSACTION} element={<Transaction />} />
+              <Route path={OPERATIONS} element={<Operations />} />
               <Route path="*" element={<SwapContainer />} />
             </Routes>
           </Box>
