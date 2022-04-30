@@ -28,16 +28,16 @@ import {
   USER_SIGNUP_URL,
   TRANSACTION,
 } from "../../utils/NavUrls";
-import {useAppContext} from "../../provider/AppProvider";
-import {Link} from "react-router-dom";
-import {accountAddressSlice} from "../../utils/helperFunctions";
-import {Button, Tooltip} from "@mui/material";
+import { useAppContext } from "../../provider/AppProvider";
+import { Link } from "react-router-dom";
+import { accountAddressSlice } from "../../utils/helperFunctions";
+import { Button, Tooltip } from "@mui/material";
 import logo from "../../assets/linedatalogo.jpg";
 import AccountMenu from "./MenuDropDown";
 import AddIcon from "@mui/icons-material/Add";
 import BusinessIcon from "@mui/icons-material/Business";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import {getRoleFromJWT} from "../../utils/decodeJWT";
+import { getRoleFromJWT } from "../../utils/decodeJWT";
 import NotificationComponent from "../NotificationComponent";
 
 const pages = (role: string) => {
@@ -87,7 +87,7 @@ const pages = (role: string) => {
 };
 
 export default function PrimarySearchAppBar() {
-  const {jwt, account, currentBalance, disconnect} = useAppContext();
+  const { jwt, account, currentBalance, disconnect } = useAppContext();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -131,12 +131,12 @@ export default function PrimarySearchAppBar() {
   const mobileMenuId = "primary-search-account-menu-mobile";
 
   return (
-    <Box sx={{flexGrow: 1}}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <img src={logo} alt="Logo" height={65} width={150} />
+          <img src={logo} alt="Logo" height={60} width={150} />
 
-          <Box sx={{flexGrow: 1, display: {xs: "flex", md: "none"}}}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -162,7 +162,7 @@ export default function PrimarySearchAppBar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: {xs: "block", md: "none"},
+                display: { xs: "block", md: "none" },
               }}
             >
               {jwt &&
@@ -172,19 +172,21 @@ export default function PrimarySearchAppBar() {
             </Menu>
           </Box>
 
-          <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {jwt &&
               pages(getRoleFromJWT(jwt)).map((page, key) => (
                 <CustomMenuList key={key} page={page} />
               ))}
           </Box>
 
-          <Box sx={{display: {xs: "none", md: "flex", alignItems: "center"}}}>
+          <Box
+            sx={{ display: { xs: "none", md: "flex", alignItems: "center" } }}
+          >
             {jwt ? (
               <Tooltip title="Swap Tokens">
                 <Link
                   to={SWAP_TOKENS_URL}
-                  style={{color: "inherit", textDecoration: "none"}}
+                  style={{ color: "inherit", textDecoration: "none" }}
                 >
                   <Button variant="contained" color="secondary">
                     Balance : {currentBalance} LDT{" "}
@@ -202,11 +204,11 @@ export default function PrimarySearchAppBar() {
               currentBalance={currentBalance}
             />
           </Box>
-          <Box sx={{display: {xs: "flex", md: "none"}}}>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <Tooltip title="Swap Tokens">
               <Link
                 to={SWAP_TOKENS_URL}
-                style={{color: "inherit", textDecoration: "none"}}
+                style={{ color: "inherit", textDecoration: "none" }}
               >
                 <Button variant="contained" color="secondary">
                   Balance : {currentBalance} LDT{" "}
@@ -246,7 +248,7 @@ export default function PrimarySearchAppBar() {
           </MenuItem>
           <Link
             to={TRANSACTION}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Transaction History</MenuItem>
           </Link>
@@ -277,26 +279,26 @@ export default function PrimarySearchAppBar() {
         >
           <Link
             to={`${USER_LOGIN_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_LOGIN_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
           </Link>
 
           <Link
             to={`${USER_SIGNUP_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_SIGNUP_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
           </Link>
@@ -324,7 +326,7 @@ export default function PrimarySearchAppBar() {
 
           <Link
             to={TRANSACTION}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Transaction History</MenuItem>
           </Link>
@@ -355,26 +357,26 @@ export default function PrimarySearchAppBar() {
         >
           <Link
             to={`${USER_LOGIN_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Log In As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_LOGIN_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Log In As Company</MenuItem>
           </Link>
 
           <Link
             to={`${USER_SIGNUP_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As User</MenuItem>
           </Link>
           <Link
             to={`${COMPANY_SIGNUP_URL}`}
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem onClick={handleMenuClose}>Sign Up As Company</MenuItem>
           </Link>

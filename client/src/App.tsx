@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar";
 import "./App.css";
-import {Routes, Route, BrowserRouter as Router} from "react-router-dom";
-import {ChakraProvider} from "@chakra-ui/react";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
 import SwapContainer from "./components/SwapTokens";
 import AppProvider from "./provider/AppProvider";
 import UserSignUp from "./components/SignUp/userSignup";
@@ -29,14 +29,20 @@ import {
   USER_ASSETS,
   TRANSACTION,
   OPERATIONS,
+  COMPANY_FORGOT_PASSWORD,
+  USER_FORGOT_PASSWORD,
+  USER_PASSWORD_RESET,
+  COMPANY_PASSWORD_RESET,
 } from "./utils/NavUrls";
 import CustomizedSnackbars from "./components/Snackbar";
 import Transaction from "./components/Transaction/index";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {grey, cyan, red} from "@mui/material/colors";
-import {Box} from "@mui/system";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Box } from "@mui/system";
 import NotificationComponent from "./components/NotificationComponent";
 import Operations from "./components/Opeartions";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
+
 const outerTheme = createTheme({
   palette: {
     primary: {
@@ -86,6 +92,17 @@ function App() {
               <Route path={USER_ORDERS} element={<OrderList />} />
               <Route path={TRANSACTION} element={<Transaction />} />
               <Route path={OPERATIONS} element={<Operations />} />
+              <Route
+                path={COMPANY_FORGOT_PASSWORD}
+                element={<ForgotPassword />}
+              />
+              <Route
+                path={COMPANY_PASSWORD_RESET}
+                element={<ResetPassword />}
+              />
+              <Route path={USER_FORGOT_PASSWORD} element={<ForgotPassword />} />
+              <Route path={USER_PASSWORD_RESET} element={<ResetPassword />} />
+
               <Route path="*" element={<SwapContainer />} />
             </Routes>
           </Box>

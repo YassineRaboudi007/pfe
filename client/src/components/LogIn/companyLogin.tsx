@@ -7,35 +7,23 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
-import {useContext} from "react";
-import {AppContext, useAppContext} from "../../provider/AppProvider";
-import {COMPANY_SIGNUP_URL, COMPANY_FORGOT_PASSWORD} from "../../utils/NavUrls";
-import {getCompany} from "../../api/CompanyService";
-//@ts-ignore
-const {ethereum} = window;
+import { useAppContext } from "../../provider/AppProvider";
+import {
+  COMPANY_SIGNUP_URL,
+  COMPANY_FORGOT_PASSWORD,
+  ADD_ASSETS_URL,
+} from "../../utils/NavUrls";
+import { getCompany } from "../../api/CompanyService";
+import { useNavigate } from "react-router-dom";
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+//@ts-ignore
+const { ethereum } = window;
 
 export default function SignInSide() {
-  const {setJWT, changeSnackBar, connectWallet} = useAppContext();
+  let navigate = useNavigate();
+
+  const { setJWT, changeSnackBar, connectWallet } = useAppContext();
   const [values, setValues] = useForm({
     name: "",
     password: "",
@@ -63,10 +51,11 @@ export default function SignInSide() {
     connectWallet();
 
     if (res.status === "success") setJWT(res.token.token);
+    navigate(ADD_ASSETS_URL);
   };
 
   return (
-    <Grid container component="main" sx={{height: "93vh"}}>
+    <Grid container component="main" sx={{ height: "93vh" }}>
       <CssBaseline />
       <Grid
         item
@@ -96,7 +85,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Company Log In
           </Typography>
-          <Box component="form" noValidate sx={{mt: 1}}>
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -125,7 +114,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 3, mb: 2}}
+              sx={{ mt: 3, mb: 2 }}
               onClick={LogIn}
               color="secondary"
             >
@@ -136,18 +125,18 @@ export default function SignInSide() {
                 <Link
                   href={COMPANY_SIGNUP_URL}
                   variant="body2"
-                  sx={{color: "black"}}
+                  sx={{ color: "black" }}
                 >
                   {"Dont have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
-            <Grid container style={{margin: "10px 0"}}>
+            <Grid container style={{ margin: "10px 0" }}>
               <Grid item>
                 <Link
                   href={COMPANY_FORGOT_PASSWORD}
                   variant="body2"
-                  sx={{color: "black"}}
+                  sx={{ color: "black" }}
                 >
                   {"Forgot Password ?"}
                 </Link>

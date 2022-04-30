@@ -15,6 +15,10 @@ const companySchema = mongoose.Schema(
       type: String,
       required: [true, "Please add a wallet"],
     },
+    email: {
+      type: String,
+      required: [true, "Please add a wallet"],
+    },
     password: {
       type: String,
       required: [true, "Please add a password"],

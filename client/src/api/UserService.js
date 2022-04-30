@@ -30,3 +30,37 @@ export const getUser = async (fields) => {
     };
   }
 };
+
+export const requestUserResetPassword = async (email) => {
+  const { data } = await axios.post(
+    "http://localhost:4000/user/resetPasswordRequest",
+    { email }
+  );
+  console.log("data ", data);
+  if (data.err) {
+    return { status: "error", msg: data.err };
+  } else {
+    return {
+      status: "success",
+      msg: "Email Sent Successfully",
+      token: data,
+    };
+  }
+};
+
+export const userPasswordReset = async (fields) => {
+  const { data } = await axios.post(
+    "http://localhost:4000/user/passwordReset",
+    fields
+  );
+  console.log("data ", data);
+  if (data.err) {
+    return { status: "error", msg: data.err };
+  } else {
+    return {
+      status: "success",
+      msg: "Password Reset Successfully",
+      token: data,
+    };
+  }
+};
