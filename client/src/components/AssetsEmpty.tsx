@@ -1,4 +1,4 @@
-import {Box, Flex} from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 
 const AssetsEmpty = () => {
   return (
@@ -12,7 +12,7 @@ const AssetsEmpty = () => {
       mt={40}
     >
       <Flex justify={"center"} flexDir={"column"} alignItems={"center"}>
-        No Data To Show
+        No Data To Shows
       </Flex>
     </Box>
   );
