@@ -51,7 +51,6 @@ const addCompany = async (req, res) => {
 // @access  Public
 const loginCompany = async (req, res) => {
   const { name, password } = req.body;
-  console.log("name and pwd ", name, password);
   // Check for company mail
   const company = await Company.findOne({ name });
 
@@ -137,6 +136,26 @@ const generateToken = (id) => {
   });
 };
 
+const updateCompany = async (req, res) => {
+  const { id, password, symbol, website, name, email } = req.body;
+  const hash = await bcrypt.hash(password, 10);
+
+  const queryRes = await Company.findOneAndUpdate(
+    { _id: id },
+    { password: hash, symbol, website, name, email }
+  );
+  if (queryRes) {
+    res.json({ status: "Success" });
+    return;
+  }
+  res.json({ err: "Some Error Occures" });
+};
+
+const getCompanyBySymbol = async (req, res) => {
+  const company = await Company.findOne({ symbol });
+  res.json({ company });
+};
+
 module.exports = {
   addCompany,
   loginCompany,
@@ -144,4 +163,6 @@ module.exports = {
   getCompanyById,
   passwordReset,
   requestPasswordReset,
+  updateCompany,
+  getCompanyBySymbol,
 };

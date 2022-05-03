@@ -66,3 +66,19 @@ export const companyPasswordReset = async (fields) => {
     };
   }
 };
+
+export const updateCompany = async (fields) => {
+  const { data } = await axios.put(
+    "http://localhost:4000/company/update",
+    fields
+  );
+  if (data.err) {
+    return { status: "error", msg: data.err };
+  } else {
+    return {
+      status: "success",
+      msg: "Account Update Successfully",
+      token: data,
+    };
+  }
+};

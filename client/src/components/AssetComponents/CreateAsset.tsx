@@ -1,24 +1,25 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import {Button, FormControl, TextField, Typography} from "@mui/material";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 import useForm from "../../hooks/useForm";
-import {useAppContext} from "../../provider/AppProvider";
-import {getCompanyById} from "../../api/CompanyService";
-import {addAsset} from "../../smart-contract/ContractFunctions/AssetContractFunctions";
-import {getCompanyIdFromJWT, getRoleFromJWT} from "../../utils/decodeJWT";
+import { useAppContext } from "../../provider/AppProvider";
+import { getCompanyById } from "../../api/CompanyService";
+import { addAsset } from "../../smart-contract/ContractFunctions/AssetContractFunctions";
+import { getIdFromJWT, getRoleFromJWT } from "../../utils/decodeJWT";
 import Loading from "../Loading";
 
 export default function SimplePaper() {
   const [company, setCompany] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<any>(true);
-  const {jwt, changeSnackBar} = useAppContext();
+  const { jwt, changeSnackBar } = useAppContext();
   const [values, setValues] = useForm({
     price: null,
     amount: null,
   });
+
   useEffect(() => {
-    const compId = getCompanyIdFromJWT(jwt);
+    const compId = getIdFromJWT(jwt);
     getCompanyById(compId).then((res) => {
       setCompany(res);
       setIsLoading(false);
@@ -39,7 +40,7 @@ export default function SimplePaper() {
       return;
     }
 
-    (await addAsset({company: company._id, ...values}))
+    (await addAsset({ company: company._id, ...values }))
       ? changeSnackBar(true, `Asset Created`, "success")
       : changeSnackBar(true, `Error Occured`, "error");
   };
@@ -55,8 +56,8 @@ export default function SimplePaper() {
           height: "90vh",
         }}
       >
-        <Paper elevation={3} sx={{textAlign: "center", padding: "10vh 15vw"}}>
-          <Box sx={{color: "error.main"}}>
+        <Paper elevation={3} sx={{ textAlign: "center", padding: "10vh 15vw" }}>
+          <Box sx={{ color: "error.main" }}>
             {" "}
             <Typography variant="h5">
               You Are Not Authorized. You Must Be A Company
@@ -75,13 +76,13 @@ export default function SimplePaper() {
     >
       <Paper
         elevation={3}
-        sx={{width: "100%", marginTop: "10%", padding: "20px"}}
+        sx={{ width: "100%", marginTop: "10%", padding: "20px" }}
       >
-        <Box sx={{width: "90%", margin: "auto"}}>
-          <Typography variant="h4" align="center" sx={{margin: "50px"}}>
+        <Box sx={{ width: "90%", margin: "auto" }}>
+          <Typography variant="h4" align="center" sx={{ margin: "50px" }}>
             Create Asset
           </Typography>
-          <Typography variant="subtitle1" sx={{m: 1}}>
+          <Typography variant="subtitle1" sx={{ m: 1 }}>
             Company :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -93,7 +94,7 @@ export default function SimplePaper() {
               variant="outlined"
             />
           </FormControl>
-          <Typography variant="subtitle1" sx={{m: 1}}>
+          <Typography variant="subtitle1" sx={{ m: 1 }}>
             Amount :
           </Typography>
           <FormControl fullWidth margin="normal">
@@ -106,7 +107,7 @@ export default function SimplePaper() {
               variant="outlined"
             />
           </FormControl>
-          <Typography variant="subtitle1" sx={{m: 1}}>
+          <Typography variant="subtitle1" sx={{ m: 1 }}>
             Price :
           </Typography>
           <FormControl fullWidth margin="normal">

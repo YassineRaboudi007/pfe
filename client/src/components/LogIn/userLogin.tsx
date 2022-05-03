@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import useForm from "../../hooks/useForm";
-import { AppContext } from "../../provider/AppProvider";
+import { AppContext, useAppContext } from "../../provider/AppProvider";
 import { getUser } from "../../api/UserService";
 import {
   USER_SIGNUP_URL,
@@ -21,8 +21,7 @@ import { useNavigate } from "react-router-dom";
 export default function SignInSide() {
   let navigate = useNavigate();
 
-  const { setJWT, connectWallet } = React.useContext(AppContext);
-  const { changeSnackBar } = React.useContext(AppContext);
+  const { setJWT, connectWallet, changeSnackBar } = useAppContext();
 
   const [values, setValues] = useForm({
     password: "",
@@ -45,8 +44,10 @@ export default function SignInSide() {
     changeSnackBar(true, res.msg, res.status);
 
     connectWallet();
-    if (res.status === "success") setJWT(res.token.token);
-    navigate(GET_ASSETS_URL);
+    if (res.status === "success") {
+      setJWT(res.token.token);
+      navigate(GET_ASSETS_URL);
+    }
   };
 
   return (

@@ -50,8 +50,10 @@ export default function SignInSide() {
 
     connectWallet();
 
-    if (res.status === "success") setJWT(res.token.token);
-    navigate(ADD_ASSETS_URL);
+    if (res.status === "success") {
+      setJWT(res.token.token);
+      navigate(ADD_ASSETS_URL);
+    }
   };
 
   return (

@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
@@ -18,18 +18,23 @@ import {
   USER_ASSETS,
   USER_ORDERS,
   OPERATIONS,
+  USER_SETTINGS,
+  COMPANY_SETTINGS,
 } from "../../utils/NavUrls";
-import {useAppContext} from "../../provider/AppProvider";
-import {accountAddressSlice} from "../../utils/helperFunctions";
+import { useAppContext } from "../../provider/AppProvider";
+import { accountAddressSlice } from "../../utils/helperFunctions";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import WebAssetIcon from "@mui/icons-material/WebAsset";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import {Divider, Typography} from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import BusinessIcon from "@mui/icons-material/Business";
+import { getRoleFromJWT } from "../../utils/decodeJWT";
+
 export default function AccountMenu(props: any) {
-  const {account, disconnect} = useAppContext();
+  const { account, disconnect, jwt } = useAppContext();
+  const [userType, setUserType] = React.useState<"user" | "company">("user");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -38,19 +43,24 @@ export default function AccountMenu(props: any) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  React.useEffect(() => {
+    if (jwt) setUserType(getRoleFromJWT(jwt));
+  }, [jwt]);
+
   return (
     <React.Fragment>
-      <Box sx={{display: "flex", alignItems: "center", textAlign: "center"}}>
+      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ml: 2}}
+            sx={{ ml: 2 }}
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -86,20 +96,20 @@ export default function AccountMenu(props: any) {
             },
           },
         }}
-        transformOrigin={{horizontal: "right", vertical: "top"}}
-        anchorOrigin={{horizontal: "right", vertical: "bottom"}}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         {!props.userConnected ? (
           <div>
             <Typography
-              style={{margin: "0 10px", fontSize: "18px"}}
+              style={{ margin: "0 10px", fontSize: "18px" }}
               variant="h6"
             >
               Log In
             </Typography>
             <Link
               to={`${USER_LOGIN_URL}`}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
@@ -110,7 +120,7 @@ export default function AccountMenu(props: any) {
             </Link>
             <Link
               to={`${COMPANY_LOGIN_URL}`}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
@@ -120,12 +130,12 @@ export default function AccountMenu(props: any) {
               </MenuItem>
             </Link>
             <Divider />
-            <Typography style={{margin: "5px 10px", fontSize: "18px"}}>
+            <Typography style={{ margin: "5px 10px", fontSize: "18px" }}>
               Sign Up
             </Typography>
             <Link
               to={`${USER_SIGNUP_URL}`}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
@@ -136,7 +146,7 @@ export default function AccountMenu(props: any) {
             </Link>
             <Link
               to={`${COMPANY_SIGNUP_URL}`}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem
                 onClick={() => {
@@ -161,7 +171,7 @@ export default function AccountMenu(props: any) {
             <Divider />
             <Link
               to={USER_ASSETS}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
@@ -172,7 +182,7 @@ export default function AccountMenu(props: any) {
             </Link>
             <Link
               to={USER_ORDERS}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
@@ -185,7 +195,7 @@ export default function AccountMenu(props: any) {
 
             <Link
               to={TRANSACTION}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
@@ -197,7 +207,7 @@ export default function AccountMenu(props: any) {
 
             <Link
               to={OPERATIONS}
-              style={{textDecoration: "none", color: "inherit"}}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
@@ -208,13 +218,17 @@ export default function AccountMenu(props: any) {
             </Link>
 
             <Divider />
-
-            <MenuItem>
-              <ListItemIcon>
-                <Settings fontSize="small" />
-              </ListItemIcon>
-              Settings
-            </MenuItem>
+            <Link
+              to={userType === "user" ? USER_SETTINGS : COMPANY_SETTINGS}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <MenuItem>
+                <ListItemIcon>
+                  <Settings fontSize="small" />
+                </ListItemIcon>
+                Settings
+              </MenuItem>
+            </Link>
             <MenuItem
               onClick={() => {
                 disconnect();

@@ -1,7 +1,5 @@
 import Navbar from "./components/Navbar";
-import "./App.css";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
 import SwapContainer from "./components/SwapTokens";
 import AppProvider from "./provider/AppProvider";
 import UserSignUp from "./components/SignUp/userSignup";
@@ -33,15 +31,18 @@ import {
   USER_FORGOT_PASSWORD,
   USER_PASSWORD_RESET,
   COMPANY_PASSWORD_RESET,
+  USER_SETTINGS,
+  COMPANY_SETTINGS,
 } from "./utils/NavUrls";
 import CustomizedSnackbars from "./components/Snackbar";
 import Transaction from "./components/Transaction/index";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Box } from "@mui/system";
-import NotificationComponent from "./components/NotificationComponent";
 import Operations from "./components/Opeartions";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import UserSettings from "./components/Settings/userSettings";
+import CompanySettings from "./components/Settings/companySettings";
 
 const outerTheme = createTheme({
   palette: {
@@ -102,7 +103,8 @@ function App() {
               />
               <Route path={USER_FORGOT_PASSWORD} element={<ForgotPassword />} />
               <Route path={USER_PASSWORD_RESET} element={<ResetPassword />} />
-
+              <Route path={USER_SETTINGS} element={<UserSettings />} />
+              <Route path={COMPANY_SETTINGS} element={<CompanySettings />} />
               <Route path="*" element={<SwapContainer />} />
             </Routes>
           </Box>

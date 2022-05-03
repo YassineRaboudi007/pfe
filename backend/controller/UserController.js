@@ -69,6 +69,13 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) res.json({ err: "User Not Found" });
+  res.json(user);
+};
+
 // @desc    Get user data
 // @route   GET /api/users/me
 // @access  Private
@@ -139,10 +146,29 @@ const generateToken = (id) => {
   });
 };
 
+const updateUser = async (req, res) => {
+  console.log(req.body);
+
+  const { id, username, password, wallet } = req.body;
+  const hash = await bcrypt.hash(password, 10);
+
+  const queryRes = await User.findOneAndUpdate(
+    { _id: id },
+    { password: hash, username, wallet }
+  );
+  if (queryRes) {
+    res.json({ status: "Success" });
+    return;
+  }
+  res.json({ err: "Some Error Occures" });
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
   requestPasswordReset,
   passwordReset,
+  getUserById,
+  updateUser,
 };

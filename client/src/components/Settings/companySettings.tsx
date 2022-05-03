@@ -13,56 +13,57 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useForm from "../../hooks/useForm";
-import { AppContext } from "../../provider/AppProvider";
-import { addCompany } from "../../api/CompanyService";
+import { AppContext, useAppContext } from "../../provider/AppProvider";
+import {
+  addCompany,
+  getCompanyById,
+  updateCompany,
+} from "../../api/CompanyService";
 import { COMPANY_LOGIN_URL } from "../../utils/NavUrls";
+import { getIdFromJWT } from "../../utils/decodeJWT";
+import { getUserById } from "../../api/UserService";
 
 //@ts-ignore
 const { ethereum } = window;
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
-
-export default function SignInSide() {
-  const { setJWT, connectWallet, changeSnackBar } =
-    React.useContext(AppContext);
-  const [values, setValues] = useForm({
-    name: "",
-    symbol: "",
-    website: "",
+export default function CompanySettings() {
+  const { setJWT, connectWallet, changeSnackBar, jwt } = useAppContext();
+  const [account, setAccount] = React.useState<any>({});
+  const [values, setValues] = React.useState({
+    id: "",
+    name: null,
+    symbol: null,
+    website: null,
     password: "",
-    email: "",
+    email: null,
   });
 
+  React.useEffect(() => {
+    getCompanyById(getIdFromJWT(jwt)).then((res) => {
+      const { name, website, symbol, email } = res;
+      setValues({
+        id: getIdFromJWT(jwt),
+        name,
+        website,
+        symbol,
+        password: "",
+        email,
+      });
+      setAccount(res);
+    });
+  }, []);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValues(e);
-    console.log(values);
+    setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const SignUp = async (e: any) => {
+  const updateAccount = async (e: any) => {
     e.preventDefault();
 
-    // if (!values.name || !values.website || !values.symbol) {
-    //   changeSnackBar(true, `Please Fill All Fields`, "warning");
-    //   return;
-    // }
+    if (!values.name || !values.website || !values.symbol || !values.password) {
+      changeSnackBar(true, `Please Fill All Fields`, "warning");
+      return;
+    }
 
     // if (values.password.length < 8) {
     //   changeSnackBar(true, `Password Length Must Be at least 8`, "warning");
@@ -77,19 +78,12 @@ export default function SignInSide() {
     //   return;
     // }
 
-    ethereum.request({
-      method: "eth_requestAccounts",
-    });
+    const res = await updateCompany(values);
 
-    const res = await addCompany(values);
-    console.log(res);
-
-    connectWallet();
-    if (res) changeSnackBar(true, `Logged In`, "success");
+    if (res) changeSnackBar(true, res.msg, "success");
     else {
       changeSnackBar(true, `Invalid Credentials`, "error");
     }
-    setJWT(res.token);
   };
 
   return (
@@ -115,7 +109,7 @@ export default function SignInSide() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Company Sign Up
+            Account Settings
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
@@ -124,6 +118,7 @@ export default function SignInSide() {
               fullWidth
               name="name"
               label="Name"
+              value={!values.name ? account.name : values.name}
               type="text"
               id="password"
               autoComplete="current-password"
@@ -137,6 +132,7 @@ export default function SignInSide() {
               fullWidth
               name="email"
               label="Email"
+              value={!values.email ? account.email : values.email}
               type="text"
               id="password"
               autoComplete="current-password"
@@ -150,6 +146,7 @@ export default function SignInSide() {
               fullWidth
               id="email"
               label="Symbol"
+              value={!values.symbol ? account.symbol : values.symbol}
               name="symbol"
               autoComplete="email"
               onChange={onChange}
@@ -161,6 +158,7 @@ export default function SignInSide() {
               fullWidth
               id="email"
               label="Website"
+              value={!values.website ? account.website : values.website}
               name="website"
               autoComplete="email"
               onChange={onChange}
@@ -184,22 +182,11 @@ export default function SignInSide() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={SignUp}
+              onClick={updateAccount}
               color="secondary"
             >
-              Sign Up
+              Update Account
             </Button>
-            <Grid container>
-              <Grid item>
-                <Link
-                  href={COMPANY_LOGIN_URL}
-                  variant="body2"
-                  sx={{ color: "black" }}
-                >
-                  {"Already have An Account ? Sign In"}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Grid>

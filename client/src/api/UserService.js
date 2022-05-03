@@ -31,6 +31,15 @@ export const getUser = async (fields) => {
   }
 };
 
+export const getUserById = async (id) => {
+  const { data } = await axios.post("http://localhost:4000/user/" + id);
+  if (data.err) {
+    return { status: "error", msg: data.err };
+  } else {
+    return data;
+  }
+};
+
 export const requestUserResetPassword = async (email) => {
   const { data } = await axios.post(
     "http://localhost:4000/user/resetPasswordRequest",
@@ -60,6 +69,19 @@ export const userPasswordReset = async (fields) => {
     return {
       status: "success",
       msg: "Password Reset Successfully",
+      token: data,
+    };
+  }
+};
+
+export const updateUser = async (fields) => {
+  const { data } = await axios.put("http://localhost:4000/user/update", fields);
+  if (data.err) {
+    return { status: "error", msg: data.err };
+  } else {
+    return {
+      status: "success",
+      msg: "Account Update Successfully",
       token: data,
     };
   }
